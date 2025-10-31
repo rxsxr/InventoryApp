@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.project.ComposeAppDesktopTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-10-31T19:13:32.304Z" hostname="rosalies-air-44.lakeheadu.ca" time="0.024">
+  <properties/>
+  <testcase name="example[jvm]" classname="org.example.project.ComposeAppDesktopTest" time="0.024"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
