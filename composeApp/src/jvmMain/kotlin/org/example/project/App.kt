@@ -135,7 +135,7 @@ fun WelcomePage() {
                     //.padding(top = 20.dp),
             ) {
                 Text(
-                    "VIEW INVETORY",
+                    "VIEW INVENTORY",
                     fontFamily = monospace,
                     fontSize = 16.sp,
                 )
