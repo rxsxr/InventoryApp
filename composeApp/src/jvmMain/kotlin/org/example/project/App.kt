@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -39,12 +42,12 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.outlined.Search
 */
 
+/*
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
         WelcomePage()
-        /*
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
@@ -66,9 +69,9 @@ fun App() {
                     Text("Compose: $greeting")
                 }
             }
-        } */
+        }
     }
-}
+} */
 
 val darkBlue = Color(0xFF023047)
 val medBlue = Color(0xFF219EBC)
@@ -81,7 +84,7 @@ val monospace = FontFamily.Monospace
 
 @Composable
 @Preview
-fun WelcomePage() {
+fun WelcomePage(openInventoryPage: () -> Unit, openReportPage: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -124,7 +127,7 @@ fun WelcomePage() {
             //verticalArrangement = Arrangement.SpaceEvenly,
         ) { // actions
             ElevatedButton( // view inventory button
-                onClick = {},
+                onClick = openInventoryPage,
                 colors = ButtonDefaults.elevatedButtonColors(
                     containerColor = lightBlue,
                     contentColor = darkBlue,
@@ -142,7 +145,7 @@ fun WelcomePage() {
             }
 
             ElevatedButton( // generate report button
-                onClick = {},
+                onClick = openReportPage,
                 colors = ButtonDefaults.elevatedButtonColors(
                     containerColor = lightBlue,
                     contentColor = darkBlue
@@ -159,4 +162,24 @@ fun WelcomePage() {
             }
         }
     }
+}
+
+@Composable
+@Preview
+fun InventoryPage() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            //.background(color = darkBlue)
+            .safeContentPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text("This is the inventory page!")
+    }
+}
+
+@Composable
+@Preview
+fun ReportPage() {
+    Text("This is the report page!")
 }
