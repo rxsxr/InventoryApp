@@ -1,0 +1,123 @@
+{"items":[
+  {
+    "id_name":"apple",
+    "g_name":"Apple",
+    "tags":
+      [ "fruit"
+      , "perishable"
+      ],
+    "buy_price":"$29.01",
+    "sell_price":"$35.61",
+    "stock_amount":74,
+    "low_bound":306,
+    "dateSold":"2025-09-23"
+  },
+  {
+    "id_name":"lettuce",
+    "g_name":"Lettuce",
+    "tags":
+      [ "vegetable"
+      , "perishable"
+      ],
+    "buy_price":"$48.40",
+    "sell_price":"$56.01",
+    "stock_amount":36,
+    "low_bound":226,
+    "dateSold":"2025-08-11"
+  },
+  {
+    "id_name":"lays_chips",
+    "g_name":"Ketchup Chips",
+    "tags":
+      [ "snack"
+      , "nonperishable"
+      ],
+    "buy_price":"$69.49",
+    "sell_price":"$82.47",
+    "stock_amount":24,
+    "low_bound":7,
+    "dateSold":"2025-07-10"
+  },
+  {
+    "id_name":"orange",
+    "g_name":"Orange",
+    "tags":
+      [ "fruit"
+      , "perishable"
+      ],
+    "buy_price":"$69.52",
+    "sell_price":"$85.86",
+    "stock_amount":89,
+    "low_bound":81,
+    "dateSold":"2025-08-07"
+  },
+  {
+    "id_name":"apple_crisps",
+    "g_name":"Apple Crisps",
+    "tags":
+      [ "fruit"
+      , "snack"
+      , "nonperishable"
+      ],
+    "buy_price":"$3.45",
+    "sell_price":"$4.21",
+    "stock_amount":32,
+    "low_bound":374,
+    "dateSold":"2025-07-04"
+  },
+  {
+    "id_name":"can_tomato_sauce",
+    "g_name":"Canned Tomato Sauce",
+    "tags":
+      [ "canned"
+      , "nonperishable"
+      , "fruit"
+      ],
+    "buy_price":"$34.51",
+    "sell_price":"$41.12",
+    "stock_amount":26,
+    "low_bound":106,
+    "dateSold":"2025-09-03"
+  },
+  {
+    "id_name":"can_peach",
+    "g_name":"Canned Peaches",
+    "tags":
+      [ "canned"
+      , "nonperishable"
+      , "fruit"
+      ],
+    "buy_price":"$91.99",
+    "sell_price":"$111.92",
+    "stock_amount":75,
+    "low_bound":49,
+    "dateSold":"2025-07-07"
+  },
+  {
+    "id_name":"penne_noodle",
+    "g_name":"Penne",
+    "tags":
+      [ "pasta"
+      , "nonperishable"
+      ],
+    "buy_price":"$53.92",
+    "sell_price":"$63.94",
+    "stock_amount":10,
+    "low_bound":60,
+    "dateSold":"2025-09-15"
+  },
+  {
+    "id_name":"ice_cream",
+    "g_name":"Ice Cream",
+    "tags":
+      [ "snack"
+      , "nonperishable"
+      , "frozen"
+      ],
+    "buy_price":"$76.56",
+    "sell_price":"$91.08",
+    "stock_amount":41,
+    "low_bound":42,
+    "dateSold":"2025-10-23"
+  }
+]}

@@ -1,0 +1,9 @@
+Apple	apple	fruit,perishable
+Lettuce	lettuce	vegetable,perishable
+Ketchup Chips	lays_chips	snack,nonperishable
+Orange	orange	fruit,perishable
+Apple Crisps	apple_crisps	fruit,snack,nonperishable
+Canned Tomato Sauce	can_tomato_sauce	canned,nonperishable,fruit
+Canned Peaches	can_peach	canned,nonperishable,fruit
+Penne	penne_noodle	pasta,nonperishable
+Ice Cream	ice_cream	snack,nonperishable,frozen
