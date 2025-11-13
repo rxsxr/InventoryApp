@@ -68,6 +68,14 @@ data class ProductEntry
 			)
 		)
 
+	fun getDateStr() : String { 
+		if (dateSold != null) { 
+			return dateFormat.format(dateSold!!);
+		} else { 
+			return NILs;
+		}
+	}
+
 	// Okay, so my hack to get a companion function won't work, as 
 	// apparently only one companion object is allowed per class, because 
 	// the kotlin designers love arbitrary restrictions. 
@@ -136,11 +144,7 @@ data class ProductEntry
 			stockPieceToUSF(stockPiece),
 			U_Map(mapOf(
 				"stockBound" to U_Int(stockBoundary),
-				"dateSold"   to 
-					if ( dateSold == null ) 
-						U_String(NILs)
-					else 
-						U_String(dateFormat.format(dateSold!!))
+				"dateSold"   to U_String(this.getDateStr() )
 			))
 		)
 

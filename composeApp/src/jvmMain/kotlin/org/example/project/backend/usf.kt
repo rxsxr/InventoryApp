@@ -61,19 +61,25 @@ object UCast {
 			else  -> throw nonMatch
 		}
 
-	fun toList(usf:USF_T, nonMatch:Throwable = USFCastError("List")) : List<USF_T> = 
-		when (usf) { 
+	fun toList(usf:USF_T, nonMatch:Throwable = USFCastError("List")) : List<USF_T> {
+		return when (usf) { 
 			is U_List -> usf.list
 			else  -> throw nonMatch
 		}
+	}
 
 
 }
 
 object UMapBadGet : USF_Error();
 
-fun U_Map.getOrElse(key:String, throwable:Throwable=UMapBadGet) : USF_T =
-	if (key !in this) (throw throwable) else this[key]!!;
+fun U_Map.getOrElse(key:String, throwable:Throwable=UMapBadGet) : USF_T {
+	if (key !in this.map.keys) {
+		return (throw throwable)
+	} else {
+		return this.map[key]!!;
+	}
+}
 
 fun U_Map.getString(key:String, throwable:Throwable=UMapBadGet) : String =
 	UCast.toString(this.getOrElse(key, throwable), throwable);
@@ -81,6 +87,8 @@ fun U_Map.getString(key:String, throwable:Throwable=UMapBadGet) : String =
 fun U_Map.getInt(key:String, throwable:Throwable=UMapBadGet) : Int = 
 	UCast.toInt(this.getOrElse(key,throwable), throwable);
 
+fun U_Map.getList(key:String, throwable:Throwable=UMapBadGet) : List<USF_T> = 
+	UCast.toList(this.getOrElse(key,throwable), throwable);
 
 
 // Piece converters

@@ -3,9 +3,14 @@ package middle;
 import middle.typedefs.*;
 import middle.price.*;
 import middle.pieces.*;
+import middle.constants.*;
+
 import backend.*;
 import backend.usf.*;
+
 import kotlinx.serialization.json.*;
+import kotlinx.datetime.LocalDate;
+
 
 sealed class ProductDBErrors : Exception();
 
@@ -108,27 +113,31 @@ object ProductDB : ProductDB_I {
 	override
 	fun loadFromInit(fname : String) {// {{{
 		val initUSF : USF_T = JsonUSF.readFromFile(File(fname));
+		//println(initUSF.toString());
 		val itemKey : String = "items"
 
 		// Process items
-		if (initUSF !is U_Map  ) throw InitParseError;
-		if (itemKey !in initUSF) throw InitParseError;
-
-		val items : List<USF_T> = UCast.toList(initUSF[itemKey]!!, nonMatch=InitParseError)
+		if (initUSF !is U_Map       ) throw InitParseError;
+		if (itemKey !in initUSF.keys) throw InitParseError;
+	
+		//println( initUSF.map[itemKey] );
+		val items : List<USF_T> = initUSF.getList(itemKey, InitParseError);
 
 		for (item in items) {
 			if ( item !is U_Map ) throw InitParseError;
 
 			// Extract fields
-			val gName    : String = UCast.toString(item["g_name"]!!, nonMatch=InitParseError); 
-			val idName   : PID    = PID(UCast.toString(item["id_name"]!!, nonMatch=InitParseError));
+			val gName    : String = item.getString("g_name", InitParseError);
+			val idName   : PID    = PID(item.getString("id_name", InitParseError));
 
-			val tags : List<Tag_T> = UCast.toList(item["tags"]!!, nonMatch=InitParseError).map() { Tag_T(UCast.toString(it)) }
+			val tags : List<Tag_T> = item.getList("tags", InitParseError).map() { Tag_T(UCast.toString(it)) }
 			val buyPrice  : Price = Price.fromString(UCast.toString(item["buy_price"]!! , nonMatch=InitParseError));
 			val sellPrice : Price = Price.fromString(UCast.toString(item["sell_price"]!!, nonMatch=InitParseError));
 
-			val stockAmount : Int = UCast.toInt(item["stock_amount"]!!, nonMatch=InitParseError);
+			val stockAmount : Int = item.getInt("stock_amount", InitParseError); 
 			val stockBound  : Int = UCast.toInt(item["low_bound"]!!, nonMatch=InitParseError);
+
+			val dateSold : LocalDate = dateFormat.parse( item.getString("dateSold", InitParseError) );
 
 			// Add tags first
 			for (tag in tags)  {
@@ -143,6 +152,7 @@ object ProductDB : ProductDB_I {
 					, tagSet = tags.toSet()
 					, stockPiece = StockPiece(stockAmount, 0)
 					, stockBoundary = stockBound
+					, dateSold = dateSold
 					)
 			)
 		}
