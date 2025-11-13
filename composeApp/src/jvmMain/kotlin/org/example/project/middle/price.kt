@@ -35,7 +35,7 @@ data class Price(var amount : Int) {
 
 	override
 	fun toString() : String {
-		return "$%i.%02i".format(amount / 100, amount % 100)
+		return "$%d.%02d".format(amount / 100, amount % 100)
 	}
 
 	companion object fromString {
