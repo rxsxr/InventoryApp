@@ -11,6 +11,7 @@ fun main() = application {
     var showWelcome by remember { mutableStateOf(true) }
     var showInventoryPage by remember { mutableStateOf(false) }
     var showReportPage by remember { mutableStateOf(false) }
+    var showUpdateInventoryPage by remember { mutableStateOf(false) }
 
     if (showWelcome) {
         // welcome page
@@ -39,7 +40,20 @@ fun main() = application {
             },
             title = "Inventory"
         ) {
-            InventoryPage()
+            InventoryPage(
+                openUpdateInventoryPage = {
+                    showUpdateInventoryPage = true
+                }
+            )
+        }
+    }
+
+    if (showUpdateInventoryPage) {
+        Window(
+            title = "Update Inventory",
+            onCloseRequest = { showUpdateInventoryPage = false }
+        ){
+            UpdateInventoryPage()
         }
     }
 
@@ -54,6 +68,7 @@ fun main() = application {
             ReportPage()
         }
     }
+
 
     /*
     Window(
