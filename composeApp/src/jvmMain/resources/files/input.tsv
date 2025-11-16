@@ -1,10 +1,10 @@
-Apple	apple	fruit,perishable
-Lettuce	lettuce	vegetable,perishable
-Ketchup Chips	lays_chips	snack,nonperishable
-Orange	orange	fruit,perishable
-Apple Crisps	apple_crisps	fruit,snack,nonperishable
-Canned Tomato Sauce	can_tomato_sauce	canned,nonperishable,fruit
-Canned Peaches	can_peach	canned,nonperishable,fruit
-Penne	penne_noodle	pasta,nonperishable
+Apple	apple	fruit,perishable	Kg	0.58
+Lettuce	lettuce	vegetable,perishable	Kg	0.7
+Ketchup Chips	lays_chips	snack,nonperishable	Kg	0.3
+Orange	orange	fruit,perishable	Kg	0.58
+Apple Crisps	apple_crisps	fruit,snack,nonperishable	Kg	0.2
+Canned Tomato Sauce	can_tomato_sauce	canned,nonperishable,fruit	L	0.15
+Canned Peaches	can_peach	canned,nonperishable,fruit	L	0.15
+Penne	penne_noodle	pasta,nonperishable	Kg	1.3
 Ice Cream	ice_cream	snack,nonperishable,frozen	L	0.6
 Milk	milk	dairy,perishable	L	1
