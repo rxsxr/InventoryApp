@@ -2,7 +2,7 @@
   "items" : [
     {
       "g_name" : "Apple",
-      "id_name" : "apple#value",
+      "id_name" : "apple",
       "tags" : [
         "fruit",
         "perishable"
