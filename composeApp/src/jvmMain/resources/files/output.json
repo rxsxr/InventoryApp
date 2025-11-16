@@ -1,156 +1,116 @@
-{"items":[
-  {
-    "id_name":"apple",
-    "g_name":"Apple",
-    "tags":
-      [ "fruit"
-      , "perishable"
+{
+  "items" : [
+    {
+      "g_name" : "Apple",
+      "id_name" : "apple#value",
+      "tags" : [
+        "fruit",
+        "perishable"
       ],
-    "buy_price":"$6.78",
-    "sell_price":"$8.03",
-    "stock_amount":36,
-    "low_bound":242,
-    "dateSold":"2025-07-21",
-    "unitStr":"Kg",
-    "unitAmt":0
-  },
-  {
-    "id_name":"lettuce",
-    "g_name":"Lettuce",
-    "tags":
-      [ "vegetable"
-      , "perishable"
+      "buy_price" : "$1.50",
+      "sell_price" : "$2.00",
+      "low_bound" : 10,
+      "stock_amount" : 64
+    },
+    {
+      "g_name" : "Lettuce",
+      "id_name" : "lettuce",
+      "tags" : [
+        "vegetable",
+        "perishable"
       ],
-    "buy_price":"$79.75",
-    "sell_price":"$96.06",
-    "stock_amount":55,
-    "low_bound":188,
-    "dateSold":"2025-10-09",
-    "unitStr":"Kg",
-    "unitAmt":0
-  },
-  {
-    "id_name":"lays_chips",
-    "g_name":"Ketchup Chips",
-    "tags":
-      [ "snack"
-      , "nonperishable"
+      "buy_price" : "$83.80",
+      "sell_price" : "$100.56",
+      "low_bound" : 125,
+      "stock_amount" : 109
+    },
+    {
+      "g_name" : "Ketchup Chips",
+      "id_name" : "lays_chips",
+      "tags" : [
+        "snack",
+        "nonperishable"
       ],
-    "buy_price":"$26.64",
-    "sell_price":"$30.72",
-    "stock_amount":68,
-    "low_bound":292,
-    "dateSold":"2025-10-17",
-    "unitStr":"Kg",
-    "unitAmt":0
-  },
-  {
-    "id_name":"orange",
-    "g_name":"Orange",
-    "tags":
-      [ "fruit"
-      , "perishable"
+      "buy_price" : "$78.07",
+      "sell_price" : "$93.68",
+      "low_bound" : 177,
+      "stock_amount" : 507
+    },
+    {
+      "g_name" : "Orange",
+      "id_name" : "orange",
+      "tags" : [
+        "fruit",
+        "perishable"
       ],
-    "buy_price":"$68.27",
-    "sell_price":"$80.33",
-    "stock_amount":59,
-    "low_bound":242,
-    "dateSold":"2025-08-07",
-    "unitStr":"Kg",
-    "unitAmt":0
-  },
-  {
-    "id_name":"apple_crisps",
-    "g_name":"Apple Crisps",
-    "tags":
-      [ "fruit"
-      , "snack"
-      , "nonperishable"
+      "buy_price" : "$40.60",
+      "sell_price" : "$48.72",
+      "low_bound" : 154,
+      "stock_amount" : 539
+    },
+    {
+      "g_name" : "Apple Crisps",
+      "id_name" : "apple_crisps",
+      "tags" : [
+        "fruit",
+        "snack",
+        "nonperishable"
       ],
-    "buy_price":"$19.18",
-    "sell_price":"$22.39",
-    "stock_amount":65,
-    "low_bound":398,
-    "dateSold":"2025-09-21",
-    "unitStr":"Kg",
-    "unitAmt":0
-  },
-  {
-    "id_name":"can_tomato_sauce",
-    "g_name":"Canned Tomato Sauce",
-    "tags":
-      [ "canned"
-      , "nonperishable"
-      , "fruit"
+      "buy_price" : "$55.62",
+      "sell_price" : "$66.74",
+      "low_bound" : 72,
+      "stock_amount" : 480
+    },
+    {
+      "g_name" : "Canned Tomato Sauce",
+      "id_name" : "can_tomato_sauce",
+      "tags" : [
+        "canned",
+        "nonperishable",
+        "fruit"
       ],
-    "buy_price":"$97.65",
-    "sell_price":"$116.16",
-    "stock_amount":14,
-    "low_bound":20,
-    "dateSold":"2025-09-01",
-    "unitStr":"L",
-    "unitAmt":0
-  },
-  {
-    "id_name":"can_peach",
-    "g_name":"Canned Peaches",
-    "tags":
-      [ "canned"
-      , "nonperishable"
-      , "fruit"
+      "buy_price" : "$23.60",
+      "sell_price" : "$28.32",
+      "low_bound" : 35,
+      "stock_amount" : 344
+    },
+    {
+      "g_name" : "Canned Peaches",
+      "id_name" : "can_peach",
+      "tags" : [
+        "canned",
+        "nonperishable",
+        "fruit"
       ],
-    "buy_price":"$59.81",
-    "sell_price":"$73.34",
-    "stock_amount":96,
-    "low_bound":384,
-    "dateSold":"2025-09-03",
-    "unitStr":"L",
-    "unitAmt":0
-  },
-  {
-    "id_name":"penne_noodle",
-    "g_name":"Penne",
-    "tags":
-      [ "pasta"
-      , "nonperishable"
+      "buy_price" : "$50.25",
+      "sell_price" : "$60.30",
+      "low_bound" : 123,
+      "stock_amount" : 487
+    },
+    {
+      "g_name" : "Penne",
+      "id_name" : "penne_noodle",
+      "tags" : [
+        "pasta",
+        "nonperishable"
       ],
-    "buy_price":"$71.56",
-    "sell_price":"$82.54",
-    "stock_amount":53,
-    "low_bound":173,
-    "dateSold":"2025-07-12",
-    "unitStr":"Kg",
-    "unitAmt":1
-  },
-  {
-    "id_name":"ice_cream",
-    "g_name":"Ice Cream",
-    "tags":
-      [ "snack"
-      , "nonperishable"
-      , "frozen"
+      "buy_price" : "$98.26",
+      "sell_price" : "$117.91",
+      "low_bound" : 151,
+      "stock_amount" : 106
+    },
+    {
+      "g_name" : "Ice Cream",
+      "id_name" : "ice_cream",
+      "tags" : [
+        "snack",
+        "nonperishable",
+        "frozen"
       ],
-    "buy_price":"$65.53",
-    "sell_price":"$76.26",
-    "stock_amount":73,
-    "low_bound":9,
-    "dateSold":"2025-08-06",
-    "unitStr":"L",
-    "unitAmt":0
-  },
-  {
-    "id_name":"milk",
-    "g_name":"Milk",
-    "tags":
-      [ "dairy"
-      , "perishable"
-      ],
-    "buy_price":"$24.10",
-    "sell_price":"$28.02",
-    "stock_amount":52,
-    "low_bound":28,
-    "dateSold":"2025-10-03",
-    "unitStr":"L",
-    "unitAmt":1
-  }
-]}
+      "buy_price" : "$86.32",
+      "sell_price" : "$103.58",
+      "low_bound" : 175,
+      "stock_amount" : 605
+    }
+  ]
+}
