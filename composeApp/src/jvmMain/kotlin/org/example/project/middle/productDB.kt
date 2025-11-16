@@ -141,6 +141,9 @@ object ProductDB : ProductDB_I {
 			val stockAmount : Int = item.getInt("stock_amount", InitParseError()); 
 			val stockBound  : Int = UCast.toInt(item["low_bound"]!!, nonMatch=InitParseError());
 
+			val unitString : String = item.getString("unitStr", InitParseError());
+			val unitAmount : Float  = item.getFloat("unitAmt", InitParseError());
+
 			val dateSold : LocalDate = dateFormat.parse( item.getString("dateSold", InitParseError()) );
 
 			// Add tags first
@@ -157,6 +160,7 @@ object ProductDB : ProductDB_I {
 					, stockPiece = StockPiece(stockAmount, 0)
 					, stockBoundary = stockBound
 					, dateSold = dateSold
+					, unitPiece = FullUnitPiece(unitString, unitAmount)
 					)
 			)
 		}
