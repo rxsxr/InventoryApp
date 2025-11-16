@@ -110,6 +110,12 @@ END {
 	gname=$1
 	id_name=$2
 	tags=$3
+	unitStr=$4
+	if ( $5 == "" ) {
+		unitAmt=1
+	} else {
+		unitAmt=$5
+	}
 
 	buy_price=randab(PRICE_MIN, BPRICE_MAX)
 	sell_price=(MARKUP + randab(-0.05, 0.05))*buy_price
@@ -169,7 +175,10 @@ END {
 			rngd = irandab(1, 29) 
 
 			dateStr = sprintf("2025-%02d-%02d", rngm, rngd)
-			jsonfield("dateSold", "%s", dateStr, 1) 
+			jsonfield("dateSold", "%s", dateStr)
+
+			jsonfield("unitStr", "%s", unitStr);
+			jsonfield("unitAmt", "%i", unitAmt);
 
 			jsonend()
 			break

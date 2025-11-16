@@ -14,13 +14,17 @@ import kotlinx.datetime.LocalDate;
 
 sealed class ProductDBErrors : Exception();
 
-object ItemNotFound      : ProductDBErrors();
-object ItemAlreadyExists : ProductDBErrors();
+class ItemNotFound(id:PID)      : ProductDBErrors();
+class ItemAlreadyExists(id:PID) : ProductDBErrors();
 
 // Implementation is named ProductDB. 
 // Only use functions present in the interface
 interface ProductDB_I { 
 	fun hasProductID(item : PID) : Boolean;
+
+	// Call this to get a handle for a product item. 
+	// Modifying that handle will not change the DB until its 
+	// .commit() method is called. 
 	fun getHandleFor(item : PID) : ProductHandle_I;
 
 	// Shortcut for doing the above and then getting the info property
@@ -70,14 +74,14 @@ object ProductDB : ProductDB_I {
 				( pEntry  = itemMap[item]!!.copy()
 				, itagSet = TagDB.tagsOf(item).toMutableSet()
 				)
-			);
+		);
 	}
 
 	// Shortcut for doing the above and then getting the info property
 	override
 	fun getInfoFor(item : PID) : ProductInfo {
 		if (! hasProductID(item)) { 
-			throw ItemNotFound;
+			throw ItemNotFound(item);
 		} else {
 			return itemMap[item]!!.toInfo()
 		}
@@ -86,7 +90,7 @@ object ProductDB : ProductDB_I {
 	override
 	fun addNewProduct(npi : NewProductInfo) {
 		if (hasProductID(npi.idName)) {
-			throw ItemAlreadyExists;
+			throw ItemAlreadyExists(npi.idName);
 		} else {
 			itemMap[npi.idName] = ProductEntry.fromNewPInfo(npi);
 		}
@@ -105,7 +109,7 @@ object ProductDB : ProductDB_I {
 		}
 	}
 
-	object InitParseError : Exception();
+	class InitParseError() : Exception();
 
 	private val tagKey  : String = "tagDB";
 	private val prodKey : String = "productDB";
@@ -117,27 +121,27 @@ object ProductDB : ProductDB_I {
 		val itemKey : String = "items"
 
 		// Process items
-		if (initUSF !is U_Map       ) throw InitParseError;
-		if (itemKey !in initUSF.keys) throw InitParseError;
+		if (initUSF !is U_Map       ) throw InitParseError();
+		if (itemKey !in initUSF.keys) throw InitParseError();
 	
 		//println( initUSF.map[itemKey] );
-		val items : List<USF_T> = initUSF.getList(itemKey, InitParseError);
+		val items : List<USF_T> = initUSF.getList(itemKey, InitParseError());
 
 		for (item in items) {
-			if ( item !is U_Map ) throw InitParseError;
+			if ( item !is U_Map ) throw InitParseError();
 
 			// Extract fields
-			val gName    : String = item.getString("g_name", InitParseError);
-			val idName   : PID    = PID(item.getString("id_name", InitParseError));
+			val gName    : String = item.getString("g_name", InitParseError());
+			val idName   : PID    = PID(item.getString("id_name", InitParseError()));
 
-			val tags : List<Tag_T> = item.getList("tags", InitParseError).map() { Tag_T(UCast.toString(it)) }
-			val buyPrice  : Price = Price.fromString(UCast.toString(item["buy_price"]!! , nonMatch=InitParseError));
-			val sellPrice : Price = Price.fromString(UCast.toString(item["sell_price"]!!, nonMatch=InitParseError));
+			val tags : List<Tag_T> = item.getList("tags", InitParseError()).map() { Tag_T(UCast.toString(it)) }
+			val buyPrice  : Price = Price.fromString(UCast.toString(item["buy_price"]!! , nonMatch=InitParseError()));
+			val sellPrice : Price = Price.fromString(UCast.toString(item["sell_price"]!!, nonMatch=InitParseError()));
 
-			val stockAmount : Int = item.getInt("stock_amount", InitParseError); 
-			val stockBound  : Int = UCast.toInt(item["low_bound"]!!, nonMatch=InitParseError);
+			val stockAmount : Int = item.getInt("stock_amount", InitParseError()); 
+			val stockBound  : Int = UCast.toInt(item["low_bound"]!!, nonMatch=InitParseError());
 
-			val dateSold : LocalDate = dateFormat.parse( item.getString("dateSold", InitParseError) );
+			val dateSold : LocalDate = dateFormat.parse( item.getString("dateSold", InitParseError()) );
 
 			// Add tags first
 			for (tag in tags)  {
@@ -162,9 +166,9 @@ object ProductDB : ProductDB_I {
 
 	sealed class DBLoadError : USF_Error();
 
-	object TagLoadError       : DBLoadError();
-	object ProductLoadError   : DBLoadError();
-	object BothLoadError      : DBLoadError();
+	class TagLoadError()       : DBLoadError();
+	class ProductLoadError()   : DBLoadError();
+	class BothLoadError()      : DBLoadError();
 
 	fun toUSF() : USF_T {
 		val itemMapPart : USF_T = 
@@ -184,10 +188,10 @@ object ProductDB : ProductDB_I {
 	}
 
 	fun fromUSF(usf : USF_T) {
-		if (usf !is U_Map) throw BothLoadError;
+		if (usf !is U_Map) throw BothLoadError();
 
-		var tagUSF  : USF_T = usf.getOrElse(tagKey, TagLoadError);
-		var prodUSF : USF_T = usf.getOrElse(prodKey, ProductLoadError);
+		var tagUSF  : USF_T = usf.getOrElse(tagKey, TagLoadError());
+		var prodUSF : USF_T = usf.getOrElse(prodKey, ProductLoadError());
 
 		// Success is not here yet, we still need to load 
 		// the USFs 
@@ -196,10 +200,10 @@ object ProductDB : ProductDB_I {
 			TagDB.fromUSF(tagUSF);
 		} catch (e:TagDB_USF) {
 			println("Tag DB load error occured");
-			throw TagLoadError;
+			throw TagLoadError();
 		}
 
-		if (prodUSF !is U_Map) throw ProductLoadError;
+		if (prodUSF !is U_Map) throw ProductLoadError();
 		for ( (uk,uv) in prodUSF.map ) {
 			val k = PID( uk )
 			val v = ProductEntry.c.fromUSF(uv);

@@ -34,12 +34,24 @@ data class ProductInfo
 	, var tagSet       : Set<Tag_T>
 	, var stockPiece   : StockPiece
 	, var stockLevel   : stockLevelE
-
-	// Is null when no products have been sold yet
-	, var salesInfo   : SalesInfo? 
+	, var unitPiece    : UnitPiece
+	, var salesInfo    : SalesInfo
 	) : IName  by namePiece
 	  , IPrice by pricePiece
 	  , IStock by stockPiece
+
+
+data class FullUnitPiece 
+	( var unitString : String
+	, var unitAmount : Float
+	);
+
+// Full nullable to partial 
+fun fullNToPart(full : FullUnitPiece?) : UnitPiece = 
+	if ( full == null ) 
+		UnitPiece(null, null)
+	else 
+		UnitPiece(full.unitString, full.unitAmount);
 
 data class NewProductInfo
 	( var namePiece   : NamePiece
@@ -49,6 +61,7 @@ data class NewProductInfo
 	, var tagSet        : Set<Tag_T> = setOf()
 	, var stockBoundary : Int = 0
 	, var stockPiece    : StockPiece = StockPiece(0,0)
+	, var unitPiece     : FullUnitPiece? = null
 	, var dateSold      : LocalDate? = null
 	) : IName  by namePiece 
 	  , IPrice by pricePiece

@@ -15,6 +15,7 @@ data class ProductEntry
 	( var namePiece      : NamePiece
 	, var pricePiece     : PricePiece
 	, var stockPiece     : StockPiece
+	, var unitPiece      : UnitPiece
 	, var stockBoundary  : Int
 	, var dateSold       : LocalDate?
 	) : IName by namePiece 
@@ -65,6 +66,7 @@ data class ProductEntry
 			, stockPiece  = this.stockPiece
 			, stockLevel  = this.stockLevel
 			, salesInfo   = this.salesInfo
+			, unitPiece   = this.unitPiece
 			)
 		)
 
@@ -75,6 +77,16 @@ data class ProductEntry
 			return NILs;
 		}
 	}
+
+	// BEGIN IUnits implementation
+
+	var unitStr : String? = null
+		get() = unitPiece?.unitStr ?: null;
+
+	var unitAmt : Float?  = null
+		get() = unitPiece?.unitAmt ?: 1.0f;
+
+	// END   IUnits implementation
 
 	// Okay, so my hack to get a companion function won't work, as 
 	// apparently only one companion object is allowed per class, because 
@@ -92,13 +104,13 @@ data class ProductEntry
 	// Anyways, to make it as painless as possible, make each companion object 
 	// just have the identifier "c".
 	companion object c {
-		object FromUSFError : Exception();
+		class FromUSFError() : Exception();
 		fun fromNewPInfo(npi : NewProductInfo) : ProductEntry { 
 			// Setup TagDB
 			TagDB.setTagsOf(npi.idName, npi.tagSet)
 
 			return ( ProductEntry
-				( namePiece = npi.namePiece
+				( namePiece  = npi.namePiece
 				, pricePiece = npi.pricePiece
 				, stockPiece = 
 					(StockPiece 
@@ -108,29 +120,33 @@ data class ProductEntry
 					)
 				, stockBoundary = npi.stockBoundary
 				, dateSold   = npi.dateSold
+				, unitPiece  = fullNToPart(npi.unitPiece)
 				))
 		}
 
 		fun fromUSF(usf : USF_T) : ProductEntry {
-			if ( usf !is U_Map ) throw FromUSFError;
+			if ( usf !is U_Map ) throw FromUSFError();
 
 			val namePiece  = namePieceFromUSF(usf);
 			val pricePiece = pricePieceFromUSF(usf);
 			val stockPiece = stockPieceFromUSF(usf);
+			val unitPiece  = unitPieceFromUSF(usf);
 
-			val stockBound  = usf.getInt("stockBound", FromUSFError);
+			val stockBound  = usf.getInt("stockBound", FromUSFError());
 
-			val dateSoldStr = usf.getString("dateSold", FromUSFError);
+			val dateSoldStr = usf.getString("dateSold", FromUSFError());
 			val dateSold : LocalDate?  = 
 				if (dateSoldStr == NILs) 
 					null
 				else 
 					dateFormat.parse(dateSoldStr);
 
+
 			return ProductEntry(
 					  namePiece     = namePiece
 					, pricePiece    = pricePiece
 					, stockPiece    = stockPiece
+					, unitPiece     = unitPiece
 					, stockBoundary = stockBound
 					, dateSold      = dateSold
 					)
@@ -142,6 +158,7 @@ data class ProductEntry
 			namePieceToUSF(namePiece),
 			pricePieceToUSF(pricePiece),
 			stockPieceToUSF(stockPiece),
+			unitPieceToUSF(unitPiece),
 			U_Map(mapOf(
 				"stockBound" to U_Int(stockBoundary),
 				"dateSold"   to U_String(this.getDateStr() )

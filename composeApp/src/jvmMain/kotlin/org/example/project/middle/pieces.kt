@@ -51,7 +51,24 @@ data class StockPiece
 	) : IStock;
 //
 
-
+interface IUnits
+	{ var unitStr : String?
+	; var unitAmt : Float?
+	};
+data class UnitPiece 
+	( override var unitStr : String?
+	, override var unitAmt : Float?
+	) : IUnits
+{
+	fun isNotFull() = unitStr == null || unitAmt == null;
+	fun toFull() : FullUnitPiece? = 
+		if (isNotFull()) null
+		else
+			FullUnitPiece(
+				unitString = this.unitStr!!,
+				unitAmount = this.unitAmt!!
+			)
+}
 
 
 // LONG EXPLANATION 

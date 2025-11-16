@@ -142,6 +142,20 @@ class ComposeAppDesktopTest {
 	}
 
 	@Test 
+	fun USF_Map_getters() { 
+		val usf : U_Map = 
+			U_Map(mapOf(
+				"a" to U_Int(1),
+				"b" to U_String("bstr"),
+				"c" to U_Int(4)
+			))
+
+		assertEquals(usf.getInt("a"), 1)
+		assertEquals(usf.getOrElse("a"), U_Int(1))
+		assertEquals(usf.getOrElse("b"), U_String("bstr"));
+	}
+
+	@Test 
 	fun Price_simpleTest() {
 		var p1 : Price = Price(1200)
 		var p2 : Price = 2 * p1;
@@ -170,21 +184,26 @@ class ComposeAppDesktopTest {
 
 	@Test 
 	fun serialTests() {
-		val pEntry : ProductEntry = 
+		var pEntry : ProductEntry = 
 			ProductEntry(
-				NamePiece("test1",PID("test2")),
-				PricePiece(Price(50),Price(1200)),
-				StockPiece(120, 120),
+				namePiece   = NamePiece("test1",PID("test2")),
+				pricePiece  = PricePiece(Price(50),Price(1200)),
+				stockPiece  = StockPiece(120, 120),
+				unitPiece   = UnitPiece("L", 1.0f),
 				100,
 				null
 			);
+		fun trySerial() = assertEquals(pEntry, ProductEntry.c.fromUSF(pEntry.toUSF()));
 
-		assertEquals(pEntry, ProductEntry.c.fromUSF(pEntry.toUSF()))
+		trySerial();
 
 		pEntry.dateSold = LocalDate.parse("2025-05-01");
 
-		assertEquals(pEntry, ProductEntry.c.fromUSF(pEntry.toUSF()))
+		trySerial();
 
+		pEntry.unitPiece = UnitPiece(null,null);
+
+		trySerial();
 	}
 
 	@Test 
@@ -200,4 +219,23 @@ class ComposeAppDesktopTest {
 		testUSFStr("a\\\\\\\\b\ncd\\1\"")
 
 	}
+
+	val dbPath : String = 
+		"/mnt/arch/home/tye/Documents/university work/y4s1/Programming_Languages/final/" +
+		"InventoryApp/composeApp/src/jvmMain/resources/files/"
+
+	
+	@Test
+	fun productDBSerial() {
+		val initFile : String = 
+			dbPath + "./output.json"
+
+		val dbFile   : String = 
+			dbPath + "./dbfile.json"
+
+		ProductDB.loadFromInit(initFile);
+		ProductDB.saveToDB(dbFile);
+
+	}
+
 }

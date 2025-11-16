@@ -1,4 +1,6 @@
+// vim: expandtab
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.tasks.*;
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -36,10 +38,25 @@ kotlin {
             }
             kotlin {
                 exclude("**/old_stuff/*")
+
+                compilerOptions { 
+                    // freeCompilerArgs = [ "-Xdebug" ]
+
+                    // Needed for getting the current date
+                    optIn.add("kotlin.time.ExperimentalTime")
+                }
             }
         }
     }
 }
+
+/*
+tasks.withType<KotlinCompile>().configureEach() {
+    kotlinOptions { 
+        freeCompilerArgs += "-Xdebug"
+    }
+}
+*/
 
 
 compose.desktop {
@@ -53,3 +70,4 @@ compose.desktop {
         }
     }
 }
+

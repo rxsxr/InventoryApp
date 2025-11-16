@@ -33,17 +33,18 @@ fun descapeString(s:String) =
 		}
 	}
 
-fun jsonToUSF(json : JsonElement) : USF_T =(
+fun jsonToUSF(json : JsonElement) : USF_T {
 	when (json) {
 		is JsonPrimitive -> 
-			if (json.isString) {
-				U_String(descapeString(json.content));
+			if (json.isString) { 
+				return U_String(descapeString(json.content));
 			} else {
-				U_Int( json.content.toInt() );
+				return U_Int(json.content.toInt());
 			}
 
+
 		is JsonObject ->
-			U_Map( 
+			return U_Map( 
 				buildMap() {
 					for ( (key,value) in json ) {
 						put(key, jsonToUSF(value))
@@ -51,8 +52,9 @@ fun jsonToUSF(json : JsonElement) : USF_T =(
 				}
 			)
 
-		is JsonArray -> U_List( json.map() { jsonToUSF(it) } )
-	})
+		is JsonArray -> return U_List( json.map() { jsonToUSF(it) } )
+	}
+}
 
 fun USFToJson(usf : USF_T) : JsonElement =(
 	when (usf) {
