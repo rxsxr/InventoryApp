@@ -27,3 +27,8 @@ composeApp/build/**
 .gradle/**
 build/**
 .kotlin/**
+
+
+# Vim .swp files
+*.swp
+.DS_Store
