@@ -24,5 +24,6 @@ hs_err_pid*
 replay_pid*
 
 composeApp/build/**
-.gradle/*
-build/*
+.gradle/**
+build/**
+.kotlin/**
