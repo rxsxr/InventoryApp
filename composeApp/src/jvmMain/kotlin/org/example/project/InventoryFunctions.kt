@@ -50,7 +50,7 @@ fun loadInventory(): Triple<List<ProductInfo>, String?, Boolean> {
 }
 
 
-// table's header row
+// header row
 @Composable
 fun tableHeaderRow() {
     Row(
@@ -62,8 +62,9 @@ fun tableHeaderRow() {
         headerCell("Name", Modifier.weight(2f))
         headerCell("Tags", Modifier.weight(2f))
         headerCell("Stock", Modifier.weight(1f))
-        headerCell("Buying Price", Modifier.weight(1f))
+        headerCell("Buy Price", Modifier.weight(1f))
         headerCell("Sale Price", Modifier.weight(1f))
+        headerCell("Unit", Modifier.weight(1f))
     }
 }
 
@@ -91,6 +92,24 @@ fun inventoryTable(products: List<ProductInfo>) {
 
             val tagText = info.tagSet.joinToString(", ") { it.tag }
             val stockColor = if (info.stockLevel.name == "Low") Color.Red else Color.Green
+            val unitText = if (info.unitPiece.unitStr == null || info.unitPiece.unitStr == "<<NIL>>") {
+                "none"
+            } else {
+                val str = info.unitPiece.unitStr
+                val amt = info.unitPiece.unitAmt
+
+                if (amt == null || amt.toString() == "<<NIL>>") {
+                    str!!
+                } else {
+                    "$amt / $str" // eg. 1 / Kilogram
+                }
+            }
+                /* when (info.unitPiece.unitStr) {
+                                "L", "Litre", "Litres" -> "Litre"
+                                "kg", "KG", "Kilogram" -> "Kilogram"
+                                null -> "None"
+                                else -> info.unitPiece.unitStr!!
+                            } */
 
             Row(
                 modifier = Modifier
@@ -104,6 +123,7 @@ fun inventoryTable(products: List<ProductInfo>) {
                 itemCell(info.totalStock.toString(), Modifier.weight(1f), stockColor)
                 itemCell(info.buyPrice.toString(), Modifier.weight(1f), Color.White)
                 itemCell(info.sellPrice.toString(), Modifier.weight(1f), Color.White)
+                itemCell(unitText, Modifier.weight(1f), Color.White)
             }
         }
     }
