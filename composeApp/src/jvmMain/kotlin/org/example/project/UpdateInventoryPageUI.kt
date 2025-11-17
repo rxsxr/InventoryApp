@@ -291,7 +291,7 @@ fun AddNewProductUI(
     var sellPrice by remember { mutableStateOf("") }
     var stockAmount by remember { mutableStateOf("") }
     var lowBound by remember { mutableStateOf("") }
-    var dateSold by remember { mutableStateOf("") }
+    var dateSold = ""
     var unitStr by remember { mutableStateOf("") }
     var unitAmt by remember { mutableStateOf("") }
 
@@ -366,13 +366,13 @@ fun AddNewProductUI(
         field(lowBound, { lowBound = it }, width = 0.4f)
         Spacer(Modifier.height(20.dp))
 
-        inputLabel("Date Sold (YYYY-MM-DD)")
+        /*inputLabel("Date Sold (YYYY-MM-DD)")
         field(
             v = dateSold,
             set = { dateSold = it },
             width = 0.5f
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(20.dp))*/
 
         inputLabel("Unit String (Kg or L)")
         field(unitStr, { unitStr = it }, width = 0.4f)
