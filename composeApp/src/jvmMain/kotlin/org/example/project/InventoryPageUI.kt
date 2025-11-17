@@ -40,6 +40,12 @@ fun loadInventory(): Triple<List<ProductInfo>, String?, Boolean> {
                 .filter { it.totalStock > 0 }
                 .sortedBy { it.gName }
 
+
+            ////// TODO
+          //  products.forEach { println(it) }
+            //////////////
+
+
         } catch (e: Exception) {
             loadError = e.message ?: "Unknown error loading database"
         } finally {
@@ -66,6 +72,7 @@ fun tableHeaderRow() {
         headerCell("Unit", Modifier.weight(1f))
         headerCell("Buy Price", Modifier.weight(1f))
         headerCell("Sale Price", Modifier.weight(1f))
+        //headerCell("Date Last Sold", Modifier.weight(1f))
     }
 }
 
@@ -102,9 +109,14 @@ fun inventoryTable(products: List<ProductInfo>) {
                 if (amt == null || amt.toString() == "<<NIL>>") {
                     str!!
                 } else {
-                    "$amt/$str" // eg. 1 / Kilogram
+                    if (str == "Kg") {
+                        "$amt/kg"
+                    } else {
+                        "$amt/$str" // eg. 1 / Kilogram
+                    }
                 }
             }
+
 
             Row(
                 modifier = Modifier
@@ -119,6 +131,7 @@ fun inventoryTable(products: List<ProductInfo>) {
                 itemCell(unitText, Modifier.weight(1f), Color.White)
                 itemCell(info.buyPrice.toString(), Modifier.weight(1f), Color.White)
                 itemCell(info.sellPrice.toString(), Modifier.weight(1f), Color.White)
+                //itemCell(info.salesInfo.lastSaleDate?.toString() ?: "—", Modifier.weight(1f), Color.White)
             }
         }
     }
