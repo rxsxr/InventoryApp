@@ -112,7 +112,7 @@ END {
 	tags=$3
 	unitStr=$4
 	if ( $5 == "" ) {
-		unitAmt=randab(0.1, 4.0)
+		unitAmt=randab(0.1, 6.0)
 	} else {
 		unitAmt=$5
 	}
@@ -178,7 +178,7 @@ END {
 			jsonfield("dateSold", "%s", dateStr)
 
 			jsonfield("unitStr", "%s", unitStr);
-			jsonfield("unitAmt", "%i", unitAmt, 1);
+			jsonfield("unitAmt", "%f", unitAmt, 1);
 
 			jsonend()
 			break
