@@ -348,7 +348,12 @@ fun UpdateInventoryPage(
             )
         }
 
-        UpdateMode.EditProductInfo -> { }
+        UpdateMode.EditProductInfo -> {
+            EditProductUI(
+                onBack = { mode = UpdateMode.None },
+                refreshInventory = { refreshInventory?.invoke() }
+            )
+        }
     }
 }
 
