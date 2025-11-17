@@ -329,8 +329,8 @@ fun AddNewProductUI(
 
         Spacer(Modifier.height(25.dp))
 
-        // input fields
 
+        // input fields
         inputLabel("ID Name (lowercase, no spaces)")
         field(
             v = idName,
@@ -496,7 +496,7 @@ fun RemoveProductUI(
 
 
 // EDIT PRODUCT UI
-/*
+
 @Composable
 fun EditProductUI(
     onBack: () -> Unit,
@@ -506,7 +506,109 @@ fun EditProductUI(
     var scrollState = rememberScrollState()
     var message by remember { mutableStateOf("") }
 
-    var productName by remember { mutableStateOf("") }
+    var gName by remember { mutableStateOf("") }
+    var tags by remember { mutableStateOf("") }
+    var buyPrice by remember { mutableStateOf("") }
+    var sellPrice by remember { mutableStateOf("") }
+    var lowBound by remember { mutableStateOf("") }
+    var unitStr by remember { mutableStateOf("") }
+    var unitAmt by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(darkBlue)
+            .padding(20.dp)
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        // back button
+        ElevatedButton(
+            onClick = onBack,
+            colors = ButtonDefaults.elevatedButtonColors(
+                containerColor = lightBlue,
+                contentColor = darkBlue
+            ),
+            modifier = Modifier.align(Alignment.Start)
+        ) {
+            Text("← Back")
+        }
+
+        Spacer(Modifier.height(20.dp))
+
+        // Title
+        Text(
+            text = "EDIT PRODUCT",
+            color = yellow,
+            fontFamily = monospace,
+            fontWeight = FontWeight.Bold,
+            fontSize = 26.sp
+        )
+        Spacer(Modifier.height(30.dp))
+
+        // input fields
+        inputLabel("Product Name (to modify its attributes)")
+        field(gName, { gName = it })
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Tags (comma separated)")
+        field(tags, { tags = it })
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Buy Price (e.g. \$2.50)")
+        field(
+            v = buyPrice,
+            set = { buyPrice = it },
+            width = 0.5f
+        )
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Sell Price (e.g. \$3.99)")
+        field(sellPrice, { sellPrice = it }, width = 0.5f)
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Low Bound")
+        field(lowBound, { lowBound = it }, width = 0.4f)
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Unit String (Kg or L)")
+        field(unitStr, { unitStr = it }, width = 0.4f)
+        Spacer(Modifier.height(20.dp))
+
+        inputLabel("Unit Amount")
+        field(
+            v = unitAmt,
+            set = { unitAmt = it },
+            width = 0.4f
+        )
+        Spacer(Modifier.height(30.dp))
+
+        // update button
+        ElevatedButton(
+            onClick = {
+                val result = editProduct(gName, tags, buyPrice, sellPrice, lowBound, unitStr, unitAmt)
+                message = result
+                if (!result.startsWith("Error")) {
+                    refreshInventory()
+                }
+            },
+            colors = ButtonDefaults.elevatedButtonColors(
+                containerColor = lightBlue,
+                contentColor = darkBlue
+            ),
+            modifier = Modifier.width(200.dp)
+        ) {
+            Text("UPDATE", fontFamily = monospace)
+        }
 
 
-}*/
+        if (message.isNotEmpty()) {
+            Spacer(Modifier.height(20.dp))
+            Text(message, color = yellow, fontFamily = monospace)
+        }
+
+    }
+
+}
+

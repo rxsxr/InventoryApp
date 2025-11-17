@@ -87,7 +87,7 @@ fun addNewProduct(
     val unitAmtFloat = unitAmt.toFloatOrNull()
         ?: return "Error: Unit amount must be a number."
 
-    // Prices use your Price.fromString( "$5.99" )
+    // prices
     val buy: Price
     val sell: Price
     try {
@@ -97,7 +97,7 @@ fun addNewProduct(
         return "Error: Invalid price format. Use like $5.99"
     }
 
-    // DateSold uses kotlinx.datetime.LocalDate.parse
+    // dateSold
     val soldDate = try {
         if (dateSold.isBlank()) null
         else kotlinx.datetime.LocalDate.parse(dateSold)
@@ -161,12 +161,6 @@ fun removeProduct(productName: String):String {
         ?.key
         ?: return "Error: Product '$productName' not found."
 
-    /* remove tags for products
-    val tags = TagDB.tagsOf(pid).toList()
-    for (tag in tags) {
-        TagDB.removeTagProd(tag, pid)
-    } */
-
     // removal
     return try {
         TagDB.setTagsOf(pid, emptySet()) // remove tags first
@@ -179,4 +173,105 @@ fun removeProduct(productName: String):String {
 
 }
 
+fun editProduct(
+    gName: String,
+    tags: String,
+    buyPrice: String,
+    sellPrice: String,
+    lowBound: String,
+    unitStr: String,
+    unitAmt: String
+):String {
 
+    // validate product name
+    if (gName.isBlank())
+        return "Error: product name is required."
+
+    val cleaned = gName.trim().lowercase()
+    val pid = ProductDB.itemMap.entries
+        .firstOrNull { (_, info) ->
+            info.gName.trim().lowercase() == cleaned
+        }
+        ?.key
+        ?: return "Error: product '$gName' not found."
+
+    // get product handle
+    val handle = ProductDB.getHandleFor(pid)
+
+
+    if (buyPrice.isNotBlank()) {
+        try {
+            handle.buyPrice = Price.fromString(buyPrice)
+        } catch (e: Exception) {
+            return "Error: Invalid Buy Price '$buyPrice'"
+        }
+    }
+
+    if (sellPrice.isNotBlank()) {
+        try {
+            handle.sellPrice = Price.fromString(sellPrice)
+        } catch (e: Exception) {
+            return "Error: Invalid Sell Price '$sellPrice'"
+        }
+    }
+
+    if (lowBound.isNotBlank()) {
+        val low = lowBound.toIntOrNull()
+            ?: return "Error: Low Bound must be a number."
+        handle.stockBoundary = low
+    }
+
+
+    val changeUnitStr = unitStr.isNotBlank()
+    val changeUnitAmt = unitAmt.isNotBlank()
+
+    if (changeUnitStr || changeUnitAmt) {
+        val finalUnitStr = if (!changeUnitStr) handle.unitString ?: ""
+                            else unitStr.trim()
+
+        val finalUnitAmt = if (!changeUnitAmt) handle.unitAmount
+                            else unitAmt.toFloatOrNull()
+                            ?: return "Error: Unit amount must be numeric."
+
+        // if either is empty, clear units fully
+        if (finalUnitStr.isBlank() && finalUnitAmt == null) {
+            handle.clearUnits()
+        } else {
+            handle.setUnits(finalUnitStr, finalUnitAmt)
+        }
+    }
+
+
+    if (tags.isNotBlank()) {
+
+        // parse new tags
+        val newTags = tags.split(",", ";")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .map { Tag_T(it) }
+            .toSet()
+
+        // remove old tags
+        TagDB.setTagsOf(pid, emptySet())
+        // add new tags
+        TagDB.setTagsOf(pid, newTags)
+
+        handle.tagSet = newTags
+    }
+
+
+    // commit changes
+    return try {
+        if (!handle.noProblems()) {
+            val problems = handle.currentProblems.joinToString { it.toString() }
+            return "Error: Cannot commit product edits. Problems: $problems"
+        }
+
+        handle.commit()
+        ProductDB.saveToDB("files/dbfile.json")
+        "Product '$gName' info updated successfully."
+    } catch (e: Exception) {
+        "Error: Failed to update product info. ${e.message}"
+    }
+
+}
