@@ -13,6 +13,7 @@ import androidx.compose.ui.res.useResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+
 import middle.ProductDB
 import middle.typedefs.ProductInfo
 import backend.JsonUSF
@@ -62,9 +63,9 @@ fun tableHeaderRow() {
         headerCell("Name", Modifier.weight(2f))
         headerCell("Tags", Modifier.weight(2f))
         headerCell("Stock", Modifier.weight(1f))
+        headerCell("Unit", Modifier.weight(1f))
         headerCell("Buy Price", Modifier.weight(1f))
         headerCell("Sale Price", Modifier.weight(1f))
-        headerCell("Unit", Modifier.weight(1f))
     }
 }
 
@@ -101,15 +102,9 @@ fun inventoryTable(products: List<ProductInfo>) {
                 if (amt == null || amt.toString() == "<<NIL>>") {
                     str!!
                 } else {
-                    "$amt / $str" // eg. 1 / Kilogram
+                    "$amt/$str" // eg. 1 / Kilogram
                 }
             }
-                /* when (info.unitPiece.unitStr) {
-                                "L", "Litre", "Litres" -> "Litre"
-                                "kg", "KG", "Kilogram" -> "Kilogram"
-                                null -> "None"
-                                else -> info.unitPiece.unitStr!!
-                            } */
 
             Row(
                 modifier = Modifier
@@ -121,9 +116,9 @@ fun inventoryTable(products: List<ProductInfo>) {
                 itemCell(info.gName, Modifier.weight(2f), Color.White)
                 itemCell(tagText, Modifier.weight(2f), lightBlue)
                 itemCell(info.totalStock.toString(), Modifier.weight(1f), stockColor)
+                itemCell(unitText, Modifier.weight(1f), Color.White)
                 itemCell(info.buyPrice.toString(), Modifier.weight(1f), Color.White)
                 itemCell(info.sellPrice.toString(), Modifier.weight(1f), Color.White)
-                itemCell(unitText, Modifier.weight(1f), Color.White)
             }
         }
     }

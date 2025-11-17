@@ -52,6 +52,7 @@ import middle.ProductDB
 import middle.typedefs.ProductInfo
 import androidx.compose.ui.res.useResource
 import backend.JsonUSF
+import java.io.File
 
 
 
@@ -146,45 +147,54 @@ fun WelcomePage(openInventoryPage: () -> Unit, openReportPage: () -> Unit) {
     }
 }
 
-/*
-@Composable
-@Preview
-fun InventoryPage() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            //.background(color = darkBlue)
-            .safeContentPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text("This is the inventory page!")
-    }
-}
- */
+
 
 @Composable
 @Preview
-fun InventoryPage(openUpdateInventoryPage: () -> Unit) {
+fun InventoryPage(
+    openUpdateInventoryPage: () -> Unit,
+    registerInventoryRefresh: ((() -> Unit) -> Unit)? = null
+    ) {
 
     var products by remember { mutableStateOf<List<ProductInfo>>(emptyList()) }
+    var filtered by remember { mutableStateOf<List<ProductInfo>>(emptyList()) }
     var loadError by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+
+    // refresh function
+    fun refreshInventory() {
+        val newProducts = ProductDB.itemMap.keys
+            .map { pid -> ProductDB.getInfoFor(pid) }
+            .filter { info -> info.totalStock > 0 }
+            .sortedBy { it.gName }
+
+        products = newProducts
+    }
+
+    // expose refresh function
+    LaunchedEffect(Unit) {
+        registerInventoryRefresh?.invoke {refreshInventory() }
+    }
 
     // load DB from dbfile.json
     LaunchedEffect(Unit) {
         try {
             // file path
-            val dbText =  useResource("files/dbfile.json") { it.readBytes().decodeToString() }
+            val runtimeFile = File("files/dbfile.json")
 
+            // if runtime DB doesn't exist, copy from resources
+            if (!runtimeFile.exists()) {
+                runtimeFile.parentFile?.mkdirs()
+                val bytes = useResource("files/dbfile.json") { it.readBytes() }
+                runtimeFile.writeBytes(bytes)
+            }
+
+            val dbText = runtimeFile.readText()
             val usf = JsonUSF.fromString(dbText)
             ProductDB.fromUSF(usf)
 
-            val infos = ProductDB.itemMap.keys
-                .map { pid -> ProductDB.getInfoFor(pid) }
-                .filter { info -> info.totalStock > 0 } // only products in stock
-                .sortedBy { it.gName }
+            refreshInventory()
 
-            products = infos
         } catch (e: Exception) {
             loadError = e.message ?: "Unknown error loading database"
         } finally {
@@ -192,6 +202,9 @@ fun InventoryPage(openUpdateInventoryPage: () -> Unit) {
         }
     }
 
+    LaunchedEffect(products) {
+        filtered = products
+    }
 
     // format page
     Column(
@@ -240,7 +253,7 @@ fun InventoryPage(openUpdateInventoryPage: () -> Unit) {
             }
 
             else -> { // products load successfully
-                var filtered by remember { mutableStateOf(products) }
+                //var filtered by remember { mutableStateOf(products) }
 
                 tagFilter(products) { newFiltered ->
                     filtered = newFiltered
@@ -259,10 +272,6 @@ fun InventoryPage(openUpdateInventoryPage: () -> Unit) {
 
             }
         }
-
-
-
-
 
         ElevatedButton( // update inventory button
             onClick = openUpdateInventoryPage,
@@ -284,10 +293,63 @@ fun InventoryPage(openUpdateInventoryPage: () -> Unit) {
     }
 }
 
+var refreshInventoryCallback: (() -> Unit)? = null
+
+
+
+enum class UpdateMode {
+    None,
+    AddRemoveStock,
+    AddNewProduct,
+    RemoveProduct,
+    EditProductInfo
+}
+
+
+
+
 @Composable
 @Preview
-fun UpdateInventoryPage() {
-    Text("This is the update inventory page!")
+fun UpdateInventoryPage(
+    refreshInventory: (() -> Unit)? = null
+) {
+
+    var mode by remember { mutableStateOf(UpdateMode.None) }
+
+    when (mode) {
+
+        UpdateMode.None -> {
+            UpdateInventoryMenu(
+                onAddRemoveStock = { mode = UpdateMode.AddRemoveStock },
+                onAddNewProduct = { mode = UpdateMode.AddNewProduct },
+                onRemoveProduct = { mode = UpdateMode.RemoveProduct },
+                onEditProductInfo = { mode = UpdateMode.EditProductInfo }
+            )
+        }
+
+        UpdateMode.AddRemoveStock -> {
+            AddRemoveStockUI(
+                onBack = { mode = UpdateMode.None },
+                refreshInventory = { refreshInventory?.invoke() }
+                )
+        }
+
+        UpdateMode.AddNewProduct -> {
+            AddNewProductUI(
+                onBack = { mode = UpdateMode.None },
+                refreshInventory = { refreshInventory?.invoke() }
+            )
+        }
+
+        UpdateMode.RemoveProduct -> {
+            RemoveProductUI(
+                onBack = { mode = UpdateMode.None },
+                refreshInventory = { refreshInventory?.invoke() }
+            )
+        }
+
+        UpdateMode.EditProductInfo -> { }
+    }
 }
 
 @Composable

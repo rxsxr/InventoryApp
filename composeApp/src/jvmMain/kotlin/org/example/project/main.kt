@@ -12,6 +12,7 @@ fun main() = application {
     var showInventoryPage by remember { mutableStateOf(false) }
     var showReportPage by remember { mutableStateOf(false) }
     var showUpdateInventoryPage by remember { mutableStateOf(false) }
+    var inventoryRefresh: (() -> Unit)? by remember { mutableStateOf(null) }
 
     if (showWelcome) {
         // welcome page
@@ -43,6 +44,9 @@ fun main() = application {
             InventoryPage(
                 openUpdateInventoryPage = {
                     showUpdateInventoryPage = true
+                },
+                registerInventoryRefresh = { callback ->
+                    inventoryRefresh = callback
                 }
             )
         }
@@ -53,7 +57,9 @@ fun main() = application {
             title = "Update Inventory",
             onCloseRequest = { showUpdateInventoryPage = false }
         ){
-            UpdateInventoryPage()
+            UpdateInventoryPage(
+                refreshInventory = { inventoryRefresh?.invoke() }
+            )
         }
     }
 
