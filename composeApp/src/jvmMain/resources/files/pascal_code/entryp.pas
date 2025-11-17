@@ -5,6 +5,7 @@ Interface
   Uses 
     SysUtils, StrUtils,
     fpjson,
+    Date,
     Rng,
     Classes; { For TStrings }
   Const 
@@ -13,12 +14,7 @@ Interface
     NILint : Integer = -1;
     NILflt : Real    = -1.0;
 
-    { Constants for RNG }
-    { Prices are in "cents", so multiply $ amount by 100 }
-    PRICE_BOUNDS : Array[0..2] of Integer = (1*100, 100*100, 200*100);
-    MARKUP       : Real                   = 1.2;
-    STOCK_BOUNDS : Array[0..1] of Integer = (5 , 800);
-    LOW_BOUNDS   : Array[0..1] of Integer = (10, 200);
+  Function IntToPrice(X:Integer) : String;
 
   Type 
     TEntry = 
@@ -31,6 +27,7 @@ Interface
         SoldAmount  : Integer;
         UnitString  : String;
         UnitAmount  : Real;
+        DateSold    : TDate1;
         Constructor Init;
         Constructor InitFromStrings(ts : TStrings);
         Procedure GenerateExtras;
@@ -54,6 +51,8 @@ Implementation
 
     UnitString := NILs;
     UnitAmount := NILflt;
+
+    DateSold.Init;
   End;
 
   Constructor TEntry.InitFromStrings(ts : TStrings);
@@ -115,6 +114,8 @@ Implementation
     If HasNameE('stockAmount') Then StockAmount := StrToInt(CVal);
     if HasNameE('soldAmount')  Then SoldAmount  := StrToInt(CVal);
 
+    if HasNameE('dateSold') Then dateSold.fromString(CVal);
+
     if GName  = NILs Then ErrorRequired('gName');
     If idName = NILs Then ErrorRequired('idName');
     { if (TS.IndexOfName('tags') = -1) Then ErrorRequired('tags'); }
@@ -131,6 +132,10 @@ Implementation
 
     If LowBound = NILint Then LowBound := IRandAB(LOW_BOUNDS[0], LOW_BOUNDS[1]);
     If StockAmount = NILint Then StockAmount := IRandAB(STOCK_BOUNDS[0], STOCK_BOUNDS[1]);
+  
+    If UnitAmount = NILflt Then UnitAmount := Random * 4.0 + 0.1;
+
+    If DateSold.IsNIL Then DateSold.Rand;
   End;
 
   Function IntToPrice(X:Integer) : String;
@@ -157,6 +162,10 @@ Implementation
     JSO.Add('sell_price', IntToPrice(SellPrice));
     JSO.Add('low_bound', LowBound);
     JSO.Add('stock_amount', StockAmount);
+    JSO.Add('unitStr', unitString);
+    JSO.Add('unitAmt', Format('%.3f', [unitAmount]));
+
+    JSO.Add('dateSold', dateSold.toString);
 
     ToJson := JSO;
   End;

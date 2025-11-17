@@ -1,3 +1,4 @@
+
 {$MODE OBJFPC}
 Program Data_Gen(Input, Output);
 
@@ -6,6 +7,8 @@ Program Data_Gen(Input, Output);
     Classes,
     Rng,
     EntryP, entrySet,
+    TransP,
+    Date,
     INIFiles,
     {Json_Write,}
 
@@ -34,6 +37,7 @@ Var
   Var 
     SecDataList : TStringList;
     NewEntry    : TEntry;
+    I : Integer;
   Begin
     SecDataList := TStringList.Create;
 
@@ -45,7 +49,28 @@ Var
 
     entrySet.PushEntry(NewEntry);
 
+    { Add anywhere from 3 to 18 transactions }
+    For I:= 0 To IRandAB(3,18) Do
+      MakeTrans(NewEntry.IDName);
+
     SecDataList.Destroy;
+  End;
+
+  Procedure WriteObjects;
+    Var 
+      JS_Main : TJsonObject; 
+      JS_Prod, JS_Trans : TJsonData;
+  Begin
+    JS_Prod  := PEntryJson;
+    JS_Trans := TransJson;
+
+    JS_Main  := TJsonObject.Create;
+    JS_Main.Add('items', JS_Prod);
+    JS_Main.Add('trans', JS_Trans);
+    Write(JS_Main.FormatJSON);
+    Flush(Output);
+
+    JS_Main.Destroy;
   End;
 
 Var 
@@ -58,8 +83,6 @@ Begin
 
   AssignFile(OutFile, C_OUTPUTFILE);
   Rewrite(OutFile);
-
-  entrySet.SetOutput(OutFile);
 
   CurINI.ReadSections(SecList);
 

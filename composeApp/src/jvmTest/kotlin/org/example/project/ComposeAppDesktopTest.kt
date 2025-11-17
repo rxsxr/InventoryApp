@@ -225,7 +225,7 @@ class ComposeAppDesktopTest {
 		"/mnt/arch/home/tye/Documents/university work/y4s1/Programming_Languages/final/" +
 		"InventoryApp/composeApp/src/jvmMain/resources/files/"
 
-	
+
 	@Test
 	fun productDBSerial() {
 		val initFile : String = 
@@ -237,6 +237,7 @@ class ComposeAppDesktopTest {
 		ProductDB.loadFromInit(initFile);
 		ProductDB.saveToDB(dbFile);
 
-	}*/
+	}
+	*/
 
 }

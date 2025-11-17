@@ -231,7 +231,7 @@ object ProductDB : ProductDB_I {
 		val transList : List<USF_T> = initUSF.getList(transKey, InitParseError());
 
 		for (trans in transList) {
-			TODO();
+			transactionList.add( Transaction.fromUSF(trans) );
 		}
 
 	}// }}}

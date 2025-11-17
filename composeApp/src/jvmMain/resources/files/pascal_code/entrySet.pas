@@ -1,25 +1,22 @@
-
+{$MODE OBJFPC}
 
 Unit EntrySet;
 Interface 
-  Uses EntryP, fpjson;
+  Uses SysUtils, EntryP, fpjson;
   
-  Procedure SetOutput(Var NewOut : TextFile);
   Procedure PushEntry(NewEntry : TEntry);
 
-  Procedure WriteObjects;
+
+  Function  FindEntry(ID : String) : TEntry;
+  { Procedure SetEntry(ID : String; Entry : TEntry); }
+
+  Function  PEntryJson : TJSONData;
 
 Implementation
 
   Var
     CurIndex   : Integer = -1; { Dynamic arrays start at 0, so this must be before 0 }
     EntryArray : Array of TEntry;
-    CFile : TextFile;
-
-  Procedure SetOutput(Var NewOut : TextFile);
-  Begin
-    CFile := NewOut;
-  End;
 
   Procedure PushEntry(NewEntry : TEntry);
   Begin
@@ -36,16 +33,14 @@ Implementation
     EntryArray[CurIndex] := NewEntry;
   End;
 
-  Procedure WriteObjects;
+  Function  PEntryJson : TJSONData;
   Var 
     CEntry   : TEntry;
     I        : Integer;
-    JS_Outer : TJsonObject;
-    JS_Main  : TJsonArray;
+    JS_Main  : TJSONArray;
 
   Begin
-    JS_Outer := TJsonObject.Create;
-    JS_Main  := TJsonArray.Create;
+    JS_Main  := TJSONArray.Create;
 
     For I:=0 To CurIndex Do
       Begin
@@ -53,10 +48,19 @@ Implementation
       JS_Main.Add( CEntry.ToJson );
       End;
 
-    JS_Outer.Add('items', JS_Main);
-    WriteLn(CFile, JS_Outer.FormatJson);
-    Flush(CFile);
-    JS_Outer.Destroy;
+    PEntryJson := JS_Main;
+  End;
+
+  Function FindEntry(ID : String) : TEntry;
+  Var I : Integer;
+  Begin
+    For I:= 0 to CurIndex Do
+      If EntryArray[I].IDName = ID Then
+        Exit(EntryArray[I]);
+
+    For I:=0 To CurIndex Do
+      WriteLn(EntryArray[I].IDName);
+    Raise Exception.Create('Couldn''t find ID ' + ID );
   End;
 
 Initialization

@@ -185,12 +185,25 @@ fun pricePieceToUSF(pp : PricePiece) : U_Map =
 		"sellPrice" to U_Int(pp.sellPrice.amount)
 	));
 
+
+fun priceFromUSF(usf : USF_T, throwable : Throwable = USF_Error()) : Price = 
+	when (usf) {
+		is U_Int    -> Price(UCast.toInt(usf))
+		is U_String -> fromString(UCast.toString(usf))
+		else -> throw throwable
+	}
+
 fun pricePieceFromUSF(usf : USF_T) : PricePiece {
 	if ( usf !is U_Map ) throw PieceError();
-	return PricePiece (
-		  buyPrice  = Price(usf.getInt("buyPrice", PieceError()))
-		, sellPrice = Price(usf.getInt("sellPrice", PieceError()))
-		)
+	try {
+		return PricePiece (
+			  buyPrice  = priceFromUSF(usf.getOrElse("buyPrice" , PieceError()))
+			, sellPrice = priceFromUSF(usf.getOrElse("sellPrice", PieceError()))
+			)
+	} catch (e:PieceError) {
+		println("Piece Error from " + usf.toString())
+		throw e;
+	}
 }
 
 fun stockPieceToUSF(sp : StockPiece) : U_Map =

@@ -10,7 +10,10 @@
       "buy_price" : "$1.50",
       "sell_price" : "$2.00",
       "low_bound" : 10,
-      "stock_amount" : 64
+      "stock_amount" : 64,
+      "unitStr" : "Kg",
+      "unitAmt" : "0.600",
+      "dateSold" : "2024-05-16"
     },
     {
       "g_name" : "Lettuce",
@@ -19,10 +22,13 @@
         "vegetable",
         "perishable"
       ],
-      "buy_price" : "$83.80",
-      "sell_price" : "$100.56",
-      "low_bound" : 125,
-      "stock_amount" : 109
+      "buy_price" : "$9.58",
+      "sell_price" : "$11.50",
+      "low_bound" : 37,
+      "stock_amount" : 445,
+      "unitStr" : "Kg",
+      "unitAmt" : "0.800",
+      "dateSold" : "2024-05-16"
     },
     {
       "g_name" : "Ketchup Chips",
@@ -31,10 +37,13 @@
         "snack",
         "nonperishable"
       ],
-      "buy_price" : "$78.07",
-      "sell_price" : "$93.68",
-      "low_bound" : 177,
-      "stock_amount" : 507
+      "buy_price" : "$75.47",
+      "sell_price" : "$90.56",
+      "low_bound" : 112,
+      "stock_amount" : 100,
+      "unitStr" : "<<NIL>>",
+      "unitAmt" : "3.668",
+      "dateSold" : "2024-06-04"
     },
     {
       "g_name" : "Orange",
@@ -43,10 +52,13 @@
         "fruit",
         "perishable"
       ],
-      "buy_price" : "$40.60",
-      "sell_price" : "$48.72",
-      "low_bound" : 154,
-      "stock_amount" : 539
+      "buy_price" : "$55.45",
+      "sell_price" : "$66.54",
+      "low_bound" : 181,
+      "stock_amount" : 651,
+      "unitStr" : "<<NIL>>",
+      "unitAmt" : "1.954",
+      "dateSold" : "2024-06-01"
     },
     {
       "g_name" : "Apple Crisps",
@@ -56,10 +68,13 @@
         "snack",
         "nonperishable"
       ],
-      "buy_price" : "$55.62",
-      "sell_price" : "$66.74",
-      "low_bound" : 72,
-      "stock_amount" : 480
+      "buy_price" : "$55.82",
+      "sell_price" : "$66.98",
+      "low_bound" : 177,
+      "stock_amount" : 456,
+      "unitStr" : "<<NIL>>",
+      "unitAmt" : "0.332",
+      "dateSold" : "2024-07-04"
     },
     {
       "g_name" : "Canned Tomato Sauce",
@@ -69,10 +84,13 @@
         "nonperishable",
         "fruit"
       ],
-      "buy_price" : "$23.60",
-      "sell_price" : "$28.32",
-      "low_bound" : 35,
-      "stock_amount" : 344
+      "buy_price" : "$6.55",
+      "sell_price" : "$7.86",
+      "low_bound" : 171,
+      "stock_amount" : 428,
+      "unitStr" : "<<NIL>>",
+      "unitAmt" : "1.018",
+      "dateSold" : "2024-05-05"
     },
     {
       "g_name" : "Canned Peaches",
@@ -82,10 +100,13 @@
         "nonperishable",
         "fruit"
       ],
-      "buy_price" : "$50.25",
-      "sell_price" : "$60.30",
-      "low_bound" : 123,
-      "stock_amount" : 487
+      "buy_price" : "$48.51",
+      "sell_price" : "$58.21",
+      "low_bound" : 189,
+      "stock_amount" : 625,
+      "unitStr" : "L",
+      "unitAmt" : "1.595",
+      "dateSold" : "2024-09-05"
     },
     {
       "g_name" : "Penne",
@@ -94,10 +115,13 @@
         "pasta",
         "nonperishable"
       ],
-      "buy_price" : "$98.26",
-      "sell_price" : "$117.91",
-      "low_bound" : 151,
-      "stock_amount" : 106
+      "buy_price" : "$22.16",
+      "sell_price" : "$26.59",
+      "low_bound" : 174,
+      "stock_amount" : 721,
+      "unitStr" : "<<NIL>>",
+      "unitAmt" : "1.876",
+      "dateSold" : "2024-09-13"
     },
     {
       "g_name" : "Ice Cream",
@@ -107,10 +131,680 @@
         "nonperishable",
         "frozen"
       ],
-      "buy_price" : "$86.32",
-      "sell_price" : "$103.58",
-      "low_bound" : 175,
-      "stock_amount" : 605
+      "buy_price" : "$38.46",
+      "sell_price" : "$46.15",
+      "low_bound" : 45,
+      "stock_amount" : 727,
+      "unitStr" : "L",
+      "unitAmt" : "1.400",
+      "dateSold" : "2024-08-09"
+    }
+  ],
+  "trans" : [
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-05-19",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 3
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-07-20",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 1
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-09-22",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 2
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-06-24",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 6
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-05-28",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 6
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-06-16",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 8
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-05-13",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 4
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-09-20",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 8
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-08-23",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 7
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-08-05",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 4
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-06-17",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 1
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-08-28",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 2
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-05-18",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 4
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-07-07",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 4
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-07-02",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 3
+    },
+    {
+      "idName" : "apple",
+      "dateStamp" : "2024-09-27",
+      "buyPrice" : "$1.50",
+      "sellPrice" : "$2.00",
+      "numSold" : 3
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-05-26",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 4
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-06-04",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 7
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-09-28",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 4
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-09-19",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 5
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-07-06",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 8
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-07-11",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 4
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-09-13",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 1
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-07-03",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 3
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-08-10",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 6
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-05-22",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 5
+    },
+    {
+      "idName" : "lettuce",
+      "dateStamp" : "2024-06-28",
+      "buyPrice" : "$9.58",
+      "sellPrice" : "$11.50",
+      "numSold" : 1
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-05-17",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 4
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-08-26",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 8
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-09-24",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 9
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-08-15",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 4
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-08-16",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 9
+    },
+    {
+      "idName" : "lays_chips",
+      "dateStamp" : "2024-07-01",
+      "buyPrice" : "$75.47",
+      "sellPrice" : "$90.56",
+      "numSold" : 8
+    },
+    {
+      "idName" : "orange",
+      "dateStamp" : "2024-07-13",
+      "buyPrice" : "$55.45",
+      "sellPrice" : "$66.54",
+      "numSold" : 1
+    },
+    {
+      "idName" : "orange",
+      "dateStamp" : "2024-05-20",
+      "buyPrice" : "$55.45",
+      "sellPrice" : "$66.54",
+      "numSold" : 9
+    },
+    {
+      "idName" : "orange",
+      "dateStamp" : "2024-08-18",
+      "buyPrice" : "$55.45",
+      "sellPrice" : "$66.54",
+      "numSold" : 7
+    },
+    {
+      "idName" : "orange",
+      "dateStamp" : "2024-08-02",
+      "buyPrice" : "$55.45",
+      "sellPrice" : "$66.54",
+      "numSold" : 6
+    },
+    {
+      "idName" : "apple_crisps",
+      "dateStamp" : "2024-05-14",
+      "buyPrice" : "$55.82",
+      "sellPrice" : "$66.98",
+      "numSold" : 2
+    },
+    {
+      "idName" : "apple_crisps",
+      "dateStamp" : "2024-08-14",
+      "buyPrice" : "$55.82",
+      "sellPrice" : "$66.98",
+      "numSold" : 7
+    },
+    {
+      "idName" : "apple_crisps",
+      "dateStamp" : "2024-05-05",
+      "buyPrice" : "$55.82",
+      "sellPrice" : "$66.98",
+      "numSold" : 6
+    },
+    {
+      "idName" : "apple_crisps",
+      "dateStamp" : "2024-06-25",
+      "buyPrice" : "$55.82",
+      "sellPrice" : "$66.98",
+      "numSold" : 1
+    },
+    {
+      "idName" : "apple_crisps",
+      "dateStamp" : "2024-09-05",
+      "buyPrice" : "$55.82",
+      "sellPrice" : "$66.98",
+      "numSold" : 6
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-09-14",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 6
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-07-25",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 1
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-02",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 8
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-27",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 9
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-01",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 2
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-07-26",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 3
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-09-25",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 1
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-07-17",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 9
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-05-16",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 7
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-09-07",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 8
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-09-12",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 3
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-07-22",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 3
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-09-01",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 7
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-07",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 3
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-06",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 5
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-05-04",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 8
+    },
+    {
+      "idName" : "can_tomato_sauce",
+      "dateStamp" : "2024-06-12",
+      "buyPrice" : "$6.55",
+      "sellPrice" : "$7.86",
+      "numSold" : 6
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-06-09",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 8
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-08-27",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 9
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-05-24",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 9
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-09-09",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 2
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-08-06",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 8
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-07-19",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 4
+    },
+    {
+      "idName" : "can_peach",
+      "dateStamp" : "2024-07-14",
+      "buyPrice" : "$48.51",
+      "sellPrice" : "$58.21",
+      "numSold" : 6
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-08-04",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 9
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-06-15",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 2
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-05-07",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 5
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-05-01",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 4
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-09-17",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 5
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-06-20",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 7
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-05-09",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 2
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-05-10",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 4
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-06-08",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 4
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-06-03",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 5
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-08-07",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 4
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-09-11",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 3
+    },
+    {
+      "idName" : "penne_noodle",
+      "dateStamp" : "2024-07-23",
+      "buyPrice" : "$22.16",
+      "sellPrice" : "$26.59",
+      "numSold" : 1
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-09-08",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 5
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-05-08",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 2
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-08-21",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 3
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-07-04",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 6
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-06-26",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 3
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-08-11",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 8
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-07-27",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 4
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-05-21",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 8
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-07-16",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 9
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-09-23",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 4
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-05-06",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 1
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-05-12",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 3
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-06-14",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 8
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-07-09",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 5
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-07-12",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 8
+    },
+    {
+      "idName" : "ice_cream",
+      "dateStamp" : "2024-09-26",
+      "buyPrice" : "$38.46",
+      "sellPrice" : "$46.15",
+      "numSold" : 7
     }
   ]
 }
