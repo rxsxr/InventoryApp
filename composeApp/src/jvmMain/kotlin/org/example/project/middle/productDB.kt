@@ -4,6 +4,7 @@ import middle.typedefs.*;
 import middle.price.*;
 import middle.pieces.*;
 import middle.constants.*;
+import middle.transaction.*;
 
 import backend.*;
 import backend.usf.*;
@@ -27,6 +28,24 @@ interface ProductDB_I {
 	// .commit() method is called. 
 	fun getHandleFor(item : PID) : ProductHandle_I;
 
+	// Will be updated when sales are recorded
+	val transactionList : List<Transaction>;
+
+	fun getTransactionsFor(item : PID) : List<Transaction>;
+
+	// For if you want to manually add a transaction.
+	// - updateEntries determines if the corresponding ProductEntry should 
+	//   be updated as well, but feel free to ignore if desired. 
+	// NOTE: ProductHandle does this automatically, so you shouldn't /have/ to
+	//   call this. If you want it to behave like you got a handle then added 
+	//   the transaction, set updateEntries = true.
+	fun addNewTransaction(trans : Transaction, updateEntries : Boolean = false); 
+
+	// fun addNewTransactionE(trans : Transaction, updateEntries : Boolean);
+
+	// This was what I was going to add, but apparently I can't override it. 
+	//fun addNewTransaction(trans : Transaction, updateEntries : Boolean = false);
+
 	// Shortcut for doing the above and then getting the info property
 	fun getInfoFor(item : PID) : ProductInfo;
 
@@ -41,7 +60,6 @@ interface ProductDB_I {
 
 	fun saveToDB(fname : String);
 	fun loadFromDB(fname : String);
-
 }
 
 
@@ -50,6 +68,9 @@ object ProductDB : ProductDB_I {
 	// NOTE: Do NOT set this map in the front-end. It's only non-private 
 	// so that a product handle can modify it.
 	var itemMap : MutableMap<PID, ProductEntry> = mutableMapOf()
+
+	override
+	var transactionList : MutableList<Transaction> = mutableListOf();
 
 	// NOTE: Also, don't call this, it's used for running the unit tests, namely 
 	//  to test if I can completely restore the DB after:
@@ -68,7 +89,7 @@ object ProductDB : ProductDB_I {
 	fun hasProductID(item : PID) : Boolean = item in itemMap;
 
 	override 
-	fun getHandleFor(item : PID) : ProductHandle_I {
+	fun getHandleFor(item : PID) : ProductHandle {
 		return (
 			ProductHandle
 				( pEntry  = itemMap[item]!!.copy()
@@ -109,16 +130,58 @@ object ProductDB : ProductDB_I {
 		}
 	}
 
+	// 
+	//== BEGIN Transactions 
+	//
+
+	override 
+	fun addNewTransaction(trans : Transaction, updateEntries : Boolean) {
+		if (updateEntries) { 
+			// Just defer this to the ProductHandle, rather than trying to 
+			// replicate what it would do.
+			val handle : ProductHandle = getHandleFor(trans.idName);
+
+			handle.newSales = trans.numSold;
+			handle.sellDate = trans.dateStamp;
+			handle.commit();
+
+		} else { 
+			transactionList.add(trans);
+		}
+	}
+
+	/*
+	override 
+	fun addNewTransaction(trans : Transaction) {
+		_addNewTransaction(trans, false);
+	}
+
+	override
+	fun addNewTransaction(trans : Transaction, updateEntries : Boolean) {
+		_addNewTransaction(trans, updateEntries);
+	}
+	*/
+
+	override
+	fun getTransactionsFor(item : PID) : List<Transaction> = 
+		transactionList.filter() { it.idName == item };
+
+	//
+	//== END Transactions 
+	//
+
 	class InitParseError() : Exception();
 
-	private val tagKey  : String = "tagDB";
-	private val prodKey : String = "productDB";
+	private val tagKey   : String = "tagDB";
+	private val prodKey  : String = "productDB";
+	private val transKey : String = "transList";
 
 	override
 	fun loadFromInit(fname : String) {// {{{
 		val initUSF : USF_T = JsonUSF.readFromFile(File(fname));
 		//println(initUSF.toString());
-		val itemKey : String = "items"
+		val itemKey  : String = "items"
+		val transKey : String = "trans"
 
 		// Process items
 		if (initUSF !is U_Map       ) throw InitParseError();
@@ -164,6 +227,13 @@ object ProductDB : ProductDB_I {
 					)
 			)
 		}
+
+		val transList : List<USF_T> = initUSF.getList(transKey, InitParseError());
+
+		for (trans in transList) {
+			TODO();
+		}
+
 	}// }}}
 
 	private val json : Json = Json { ignoreUnknownKeys = false }
@@ -172,9 +242,10 @@ object ProductDB : ProductDB_I {
 
 	class TagLoadError()       : DBLoadError();
 	class ProductLoadError()   : DBLoadError();
+	class TransLoadError()     : DBLoadError();
 	class BothLoadError()      : DBLoadError();
 
-	fun toUSF() : USF_T {
+	fun toUSF() : USF_T {// {{{
 		val itemMapPart : USF_T = 
 			U_Map(
 			buildMap() {
@@ -183,19 +254,24 @@ object ProductDB : ProductDB_I {
 				}
 			})
 
+		val transPart  : USF_T = 
+			U_List( transactionList.map() { it.toUSF() } );
+
 		val tagMapPart : USF_T = TagDB.toUSF();
 
 		return U_Map(mapOf(
-				tagKey  to tagMapPart,
-				prodKey to itemMapPart
+				tagKey    to tagMapPart,
+				prodKey   to itemMapPart,
+				transKey  to transPart
 			))
-	}
+	}// }}}
 
-	fun fromUSF(usf : USF_T) {
+	fun fromUSF(usf : USF_T) {// {{{
 		if (usf !is U_Map) throw BothLoadError();
 
-		var tagUSF  : USF_T = usf.getOrElse(tagKey, TagLoadError());
-		var prodUSF : USF_T = usf.getOrElse(prodKey, ProductLoadError());
+		val tagUSF    : USF_T = usf.getOrElse(tagKey, TagLoadError());
+		val prodUSF   : USF_T = usf.getOrElse(prodKey, ProductLoadError());
+		val transUSF  : USF_T = usf.getOrElse(transKey, TransLoadError());
 
 		// Success is not here yet, we still need to load 
 		// the USFs 
@@ -213,7 +289,22 @@ object ProductDB : ProductDB_I {
 			val v = ProductEntry.c.fromUSF(uv);
 			itemMap[k] = v;
 		}
-	}
+
+		if (transUSF !is U_List) throw TransLoadError()
+		for ( t in transUSF ) {
+			var tt:Transaction? = null;
+			try {
+				tt = Transaction.fromUSF(t);
+			} catch (e:USF_Error) {
+				println("USF value " + t.toString() + " failed to convert to Transaction");
+				println("Error was " + e.toString() );
+				throw TransLoadError();
+			} 
+
+			// Should never be non-null by now
+			transactionList.add(tt!!);
+		}
+	}// }}}
 
 	override
 	fun saveToDB(fname : String) {

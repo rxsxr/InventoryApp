@@ -1,9 +1,13 @@
 
 package backend.usf;
 import backend.*;
+
+import middle.constants.*;
 import middle.pieces.*;
 import middle.typedefs.*;
 import middle.price.*;
+
+import kotlinx.datetime.*;
 
 // Universal Serial Format
 // An ADT that allows for the actual database format to change without
@@ -226,3 +230,8 @@ fun unitPieceFromUSF(usf:USF_T) : UnitPiece {
 
 	return UnitPiece(unitStr, unitAmt);
 }
+
+class USF_DateError(given : USF_T) : USF_Error();
+
+fun dateToUSF(date : LocalDate) : USF_T     = U_String(dateFormat.format(date));
+fun usfToDate(usf  : USF_T)     : LocalDate = dateFormat.parse( UCast.toString(usf, USF_DateError(usf)) );

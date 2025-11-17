@@ -1,13 +1,15 @@
-
+{$MODE OBJFPC}
 
 { Misc. RNG utilities }
 Unit RNG; 
 Interface 
+  Uses StrUtils;
   Type TDate1 = 
-    Record 
+    Object 
       Year  : Integer;
       Month : 1 .. 12;
       Day   : 1 .. 31;
+      Function ToString : String;
     End;
 
   Function IRandAB(A, B : Integer) : Integer;
@@ -29,5 +31,10 @@ Implementation
       Month := IRandAB(5, 10);
       Day   := IRandAB(1, 29);
       End;
+  End;
+
+  Function TDate1.ToString : String;
+  Begin
+    ToString := StrFormat('%04d-%02d-%02d', [Year, Month, Day]);
   End;
 End.

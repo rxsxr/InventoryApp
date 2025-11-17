@@ -5,24 +5,40 @@ package backend;
 import kotlin.math.*;
 
 import kotlin.enums.*;
+import kotlin.time.Clock;
 
 import middle.*;
-import middle.price.*;
-import middle.typedefs.*;
+import middle.constants.*;
 import middle.pieces.*;
+import middle.price.*;
+import middle.transaction.*;
+import middle.typedefs.*;
+
 import kotlinx.datetime.*;
-import kotlin.time.Clock;
 
 data class ProductHandle
 	( var pEntry : ProductEntry 
 	, var itagSet : MutableSet<Tag_T> 
 	) : ProductHandle_I 
-{ 
+{
+
 	override 
 	var newSales : Int = 0;
 
+	override 
+	var addNewTransaction : Boolean = true;
+
+	var sellDateWasUpdated : Boolean = false;
+
+	var _sellDate : LocalDate? = null;
+
 	override
-	var sellDate : LocalDate? = null;
+	var sellDate : LocalDate? 
+		get() = _sellDate
+		set(value) {
+			sellDateWasUpdated = true;
+			_sellDate = value;
+		}
 
 	override 
 	fun addTag(tag : Tag_T) { itagSet.add(tag) }
@@ -167,16 +183,45 @@ data class ProductHandle
 			}
 		}
 
-		// Obtain sellDate if not set
-		if (this.sellDate == null) { 
+		// BEGIN Handle sellDate update
+
+		// Intended to be when sellDate wasn't given a value, but new sales were added.
+		if ( this.newSales > 0 && this.sellDate == null ) {
 			pEntry.dateSold = Clock.System.todayIn(TimeZone.currentSystemDefault());
 		}
+
+		// Intended to be when sellDate was explicitly assigned a value 
+		if ( sellDateWasUpdated ) {
+			pEntry.dateSold = this.sellDate;
+		} 
+
+		// END Handle sellDate update
 
 		// Update the stock amounts
 		pEntry.totalStock -= newSales;
 		pEntry.totalSold  += newSales;
 
+		// BEGIN Write changes out
+
 		ProductDB.itemMap[pEntry.idName] = pEntry;
 		TagDB.setTagsOf(pEntry.idName, itagSet);
+
+		if ( addNewTransaction && newSales > 0 ) {
+
+			if ( this.sellDate == null ) {
+				this.sellDate = Clock.System.todayIn(TimeZone.currentSystemDefault());
+			}
+
+			val newTrans = Transaction(
+					idName      = pEntry.idName,
+					dateStamp   = this.sellDate!!,
+					numSold     = pEntry.totalSold,
+					pricePiece  = pEntry.pricePiece.copy()
+				)
+			ProductDB.transactionList.add(newTrans);
+
+		}
+
+		// END Write changes out
 	}
 }

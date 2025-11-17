@@ -107,9 +107,11 @@ interface ProductHandle_I {
 	fun clearUnits();
 
 	//	Notes about stock and sales: 
+	//	- If sellDate is assigned a value, no matter what happens, that 
+	//	  sellDate will become the new sellDate.
 	//	- New sales should be "entered" into the "newSales" variable. 
-	//	- To record the date of the sales, set the "sellDate" variable, otherwise
-	//	  the current date is presumed to be the sell date and recorded.
+	//	- To record the date of the sales, set the "sellDate" variable,
+	//	  if newSales > 0, the current date is presumed to be the sell date and recorded.
 
 	// NOTE: Do not change totalStock to account for sales. 
 	// That is done automatically.
@@ -120,11 +122,15 @@ interface ProductHandle_I {
 	// Set sellDate = null to record the current date
 	// DO NOT change totalStock after this. 
 	// It will automatically be changed.
-	var newSales : Int;
-	var sellDate : LocalDate?; // Default is null  
+	var newSales : Int;        // Default = true
+	var sellDate : LocalDate?; // Default = null  
 
 	// This determines at which point an item is "low" or "high" on stock
-	var stockBoundary : Int;
+	var stockBoundary : Int;   // Default = original
+
+	// Set this to false if you don't want a transaction being recorded 
+	// for this if newSales > 0. 
+	var addNewTransaction : Boolean; // Default = true
 
 	// This will save the changes to the DB if there aren't any problems.
 	// Make sure to check that currentProblems is empty, or that 
@@ -134,6 +140,7 @@ interface ProductHandle_I {
 	// If sellDate is null, the current date is obtained, and sellDate is set to that.
 	// You may call this multiple times without any problems.
 	fun commit();
+
 
 	fun noProblems() : Boolean;
 }
