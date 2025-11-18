@@ -51,7 +51,7 @@ fun updateStock(productName: String, amount: Int, isAdd: Boolean):String {
 fun saveDBToFile() {
     val file = File("files/dbfile.json")
     file.parentFile?.mkdirs()
-    JsonUSF.writeToFile(file, ProductDB.toUSF())
+    ProductDB.saveProductsTo("files/dbfile.json");
 }
 
 
@@ -139,7 +139,7 @@ fun addNewProduct(
     // insert into ProductDB & dbfile.json
     return try {
         ProductDB.addNewProduct(npi)
-        ProductDB.saveToDB("files/dbfile.json")
+        ProductDB.saveProductsTo("files/dbfile.json")
         "Product '$gName' added successfully."
     } catch (e: Exception) {
         "Error: Failed to add product. ${e.message}"
@@ -165,7 +165,7 @@ fun removeProduct(productName: String):String {
     return try {
         TagDB.setTagsOf(pid, emptySet()) // remove tags first
         ProductDB.itemMap.remove(pid)
-        ProductDB.saveToDB("files/dbfile.json")
+        ProductDB.saveProductsTo("files/dbfile.json")
         "Product '$productName' removed successfully."
     } catch (e: Exception) {
         "Error: Failed to remove product. ${e.message}"
@@ -268,7 +268,7 @@ fun editProduct(
         }
 
         handle.commit()
-        ProductDB.saveToDB("files/dbfile.json")
+        ProductDB.saveProductsTo("files/dbfile.json")
         "Product '$gName' info updated successfully."
     } catch (e: Exception) {
         "Error: Failed to update product info. ${e.message}"

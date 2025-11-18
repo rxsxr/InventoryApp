@@ -33,7 +33,7 @@ fun loadInventory(): Triple<List<ProductInfo>, String?, Boolean> {
             val dbText = useResource("files/dbfile.json") { it.readBytes().decodeToString() }
 
             val usf = JsonUSF.fromString(dbText)
-            ProductDB.fromUSF(usf)
+            ProductDB.prodFromUSF(usf)
 
             products = ProductDB.itemMap.keys
                 .map { ProductDB.getInfoFor(it) }
