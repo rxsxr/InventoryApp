@@ -34,7 +34,7 @@ import androidx.compose.ui.Modifier
 //import androidx.compose.ui.layout.weight
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import inventoryapp.composeapp.generated.resources.Res
+//import inventoryapp.composeapp.generated.resources.Res
 import inventoryapp.composeapp.generated.resources.compose_multiplatform
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Row
@@ -47,6 +47,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.style.TextOverflow
+
+import inventoryapp.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+
+
+
 
 import middle.ProductDB
 import middle.typedefs.ProductInfo
@@ -184,12 +190,15 @@ fun InventoryPage(
             // if runtime DB doesn't exist, copy from resources
             if (!runtimeFile.exists()) {
                 runtimeFile.parentFile?.mkdirs()
-                val bytes = useResource("files/dbfile.json") { it.readBytes() }
+
+                @OptIn(ExperimentalResourceApi::class)
+                val bytes = Res.readBytes("files/dbfile.json")
+                //val bytes = Res.files.dbfile_json.readBytes()
+
                 runtimeFile.writeBytes(bytes)
             }
 
-            ProductDB.loadProductsFrom("files/dbfile.json");
-
+            ProductDB.loadProductsFrom(runtimeFile.path);
             refreshInventory()
 
         } catch (e: Exception) {

@@ -39,7 +39,7 @@ kotlin {
             kotlin {
                 exclude("**/old_stuff/*")
 
-                compilerOptions { 
+                compilerOptions {
                     // freeCompilerArgs = [ "-Xdebug" ]
 
                     // Needed for getting the current date
@@ -52,12 +52,15 @@ kotlin {
 
 /*
 tasks.withType<KotlinCompile>().configureEach() {
-    kotlinOptions { 
+    kotlinOptions {
         freeCompilerArgs += "-Xdebug"
     }
 }
 */
 
+compose.resources {
+    publicResClass = true
+}
 
 compose.desktop {
     application {

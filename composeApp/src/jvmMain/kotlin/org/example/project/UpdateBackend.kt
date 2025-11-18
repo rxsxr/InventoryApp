@@ -233,12 +233,14 @@ fun editProduct(
                             else unitAmt.toFloatOrNull()
                             ?: return "Error: Unit amount must be numeric."
 
+        handle.setUnits(finalUnitStr, finalUnitAmt)
+
         // if either is empty, clear units fully
-        if (finalUnitStr.isBlank() && finalUnitAmt == null) {
+        /*if (finalUnitStr.isBlank() || finalUnitAmt == null) {
             handle.clearUnits()
         } else {
             handle.setUnits(finalUnitStr, finalUnitAmt)
-        }
+        }*/
     }
 
 

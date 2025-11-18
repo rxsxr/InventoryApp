@@ -1,7 +1,7 @@
 // vim: expandtab
 package org.example.project
 
-import cli.*;
+//import cli.*;
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.runtime.*

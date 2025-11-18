@@ -9,10 +9,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.useResource
+//import androidx.compose.ui.res.useResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+
+import inventoryapp.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 import middle.ProductDB
 import middle.typedefs.ProductInfo
@@ -30,7 +33,11 @@ fun loadInventory(): Triple<List<ProductInfo>, String?, Boolean> {
 
     LaunchedEffect(Unit) {
         try {
-            val dbText = useResource("files/dbfile.json") { it.readBytes().decodeToString() }
+
+
+            @OptIn(ExperimentalResourceApi::class)
+            val dbText = Res.readBytes("files/dbfile.json").decodeToString()
+            //val dbText = useResource("files/dbfile.json") { it.readBytes().decodeToString() }
 
             val usf = JsonUSF.fromString(dbText)
             ProductDB.prodFromUSF(usf)

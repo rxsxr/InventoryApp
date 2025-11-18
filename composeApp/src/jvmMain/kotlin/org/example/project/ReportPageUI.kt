@@ -8,8 +8,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.useResource
+//import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
+
+import inventoryapp.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 import backend.JsonUSF
 import middle.ProductDB
@@ -47,7 +50,7 @@ fun selectProductsUI(
 
     var selectedProducts by remember { mutableStateOf<Set<PID>>(emptySet()) }
 
-    // Load DB + products (same idea as InventoryPage)
+    // Load DB + products (same as InventoryPage)
     LaunchedEffect(Unit) {
         try {
             val runtimeFile = File("files/dbfile.json")
@@ -55,13 +58,18 @@ fun selectProductsUI(
             // If runtime DB doesn't exist, copy from resources
             if (!runtimeFile.exists()) {
                 runtimeFile.parentFile?.mkdirs()
-                val bytes = useResource("files/dbfile.json") { it.readBytes() }
+
+
+                @OptIn(ExperimentalResourceApi::class)
+                val bytes = Res.readBytes("files/dbfile.json")
+
+                //val bytes = useResource("files/dbfile.json") { it.readBytes() }
                 runtimeFile.writeBytes(bytes)
             }
 
             val dbText = runtimeFile.readText()
             val usf = JsonUSF.fromString(dbText)
-            ProductDB.fromUSF(usf)
+            ProductDB.prodFromUSF(usf)
 
             products = ProductDB.itemMap.keys
                 .map { pid -> ProductDB.getInfoFor(pid) }
