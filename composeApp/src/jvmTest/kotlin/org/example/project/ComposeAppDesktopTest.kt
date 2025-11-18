@@ -223,6 +223,7 @@ class ComposeAppDesktopTest {
 
 	}
 
+	/*
 	val dbPath : String = 
 		"/mnt/arch/home/tye/Documents/university work/y4s1/Programming_Languages/final/" +
 		"InventoryApp/composeApp/src/jvmMain/resources/files/"
@@ -244,5 +245,5 @@ class ComposeAppDesktopTest {
 		ProductDB.saveTransactionsTo(transFile);
 
 	}
-
+	*/
 }
