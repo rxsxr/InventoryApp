@@ -79,11 +79,11 @@ object JsonUSF {
 		val jsonObject : JsonElement = json.parseToJsonElement(str);
 		return jsonToUSF(jsonObject);
 	}
+
 	fun toString(usf : USF_T) : String { 
 		val outJson : JsonElement = USFToJson(usf);
 		return json.encodeToString(outJson);
 	}
-
 
 	fun readFromFile(file : File) : USF_T {
 		// This JSON library is crap, I can't read the json directly from 

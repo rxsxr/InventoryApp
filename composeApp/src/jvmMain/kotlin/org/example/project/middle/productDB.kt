@@ -41,11 +41,6 @@ interface ProductDB_I {
 	//   the transaction, set updateEntries = true.
 	fun addNewTransaction(trans : Transaction, updateEntries : Boolean = false); 
 
-	// fun addNewTransactionE(trans : Transaction, updateEntries : Boolean);
-
-	// This was what I was going to add, but apparently I can't override it. 
-	//fun addNewTransaction(trans : Transaction, updateEntries : Boolean = false);
-
 	// Shortcut for doing the above and then getting the info property
 	fun getInfoFor(item : PID) : ProductInfo;
 
@@ -58,8 +53,16 @@ interface ProductDB_I {
 
 	fun loadFromInit(fname : String);
 
-	fun saveToDB(fname : String);
-	fun loadFromDB(fname : String);
+	// Stores transactions to file
+	fun saveTransactionsTo(fname : String);
+	fun loadTransactionsFrom(fname : String);
+
+	// Stores products and tags to file 
+	fun saveProductsTo(fname : String);
+	fun loadProductsFrom(fname : String);
+
+	//fun saveToDB(fname : String);
+	//fun loadFromDB(fname : String);
 }
 
 
@@ -245,33 +248,31 @@ object ProductDB : ProductDB_I {
 	class TransLoadError()     : DBLoadError();
 	class BothLoadError()      : DBLoadError();
 
-	fun toUSF() : USF_T {// {{{
-		val itemMapPart : USF_T = 
-			U_Map(
-			buildMap() {
-				for ( (k,v) in itemMap ) {
-					put(k.name, v.toUSF())
-				}
-			})
+	private fun transToUSF() : USF_T =
+		U_List( transactionList.map() { it.toUSF() } );
 
-		val transPart  : USF_T = 
-			U_List( transactionList.map() { it.toUSF() } );
+	private fun transFromUSF(transUSF : USF_T) { 
+		if (transUSF !is U_List) throw TransLoadError()
+		for ( t in transUSF ) {
+			var tt:Transaction? = null;
+			try {
+				tt = Transaction.fromUSF(t);
+			} catch (e:USF_Error) {
+				println("USF value " + t.toString() + " failed to convert to Transaction");
+				println("Error was " + e.toString() );
+				throw TransLoadError();
+			} 
 
-		val tagMapPart : USF_T = TagDB.toUSF();
+			// Should never be non-null by now
+			transactionList.add(tt!!);
+		}
+	}
 
-		return U_Map(mapOf(
-				tagKey    to tagMapPart,
-				prodKey   to itemMapPart,
-				transKey  to transPart
-			))
-	}// }}}
-
-	fun fromUSF(usf : USF_T) {// {{{
+	fun prodFromUSF(usf : USF_T) { 
 		if (usf !is U_Map) throw BothLoadError();
 
 		val tagUSF    : USF_T = usf.getOrElse(tagKey, TagLoadError());
 		val prodUSF   : USF_T = usf.getOrElse(prodKey, ProductLoadError());
-		val transUSF  : USF_T = usf.getOrElse(transKey, TransLoadError());
 
 		// Success is not here yet, we still need to load 
 		// the USFs 
@@ -289,23 +290,52 @@ object ProductDB : ProductDB_I {
 			val v = ProductEntry.c.fromUSF(uv);
 			itemMap[k] = v;
 		}
+	}
 
-		if (transUSF !is U_List) throw TransLoadError()
-		for ( t in transUSF ) {
-			var tt:Transaction? = null;
-			try {
-				tt = Transaction.fromUSF(t);
-			} catch (e:USF_Error) {
-				println("USF value " + t.toString() + " failed to convert to Transaction");
-				println("Error was " + e.toString() );
-				throw TransLoadError();
-			} 
+	fun prodToUSF() : USF_T { 
+		val itemMapPart : USF_T = 
+			U_Map(
+			buildMap() {
+				for ( (k,v) in itemMap ) {
+					put(k.name, v.toUSF())
+				}
+			})
 
-			// Should never be non-null by now
-			transactionList.add(tt!!);
-		}
-	}// }}}
+		val tagMapPart : USF_T = TagDB.toUSF();
 
+		return U_Map(mapOf(
+				tagKey    to tagMapPart,
+				prodKey   to itemMapPart,
+			))
+	}
+
+
+	override 
+	fun saveTransactionsTo(fname : String) { 
+		val transPart : USF_T = transToUSF();
+		JsonUSF.writeToFile(File(fname), transPart);
+	}
+
+	override
+	fun loadTransactionsFrom(fname : String) {
+		val transPart : USF_T = JsonUSF.readFromFile(File(fname));
+		transFromUSF(transPart);
+	}
+
+	// Stores products and tags to file 
+	override
+	fun saveProductsTo(fname : String) { 
+		val prodUSF : USF_T = prodToUSF();
+		JsonUSF.writeToFile(File(fname), prodUSF);
+	}
+
+	override
+	fun loadProductsFrom(fname : String) { 
+		val prodUSF : USF_T = JsonUSF.readFromFile(File(fname));
+		prodFromUSF(prodUSF);
+	}
+
+	/*
 	override
 	fun saveToDB(fname : String) {
 		val writeUSF : USF_T = this.toUSF();
@@ -317,4 +347,5 @@ object ProductDB : ProductDB_I {
 		val usf : USF_T = JsonUSF.readFromFile(File(fname));
 		this.fromUSF(usf);
 	}
+	*/
 }

@@ -51,7 +51,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import middle.ProductDB
 import middle.typedefs.ProductInfo
 import androidx.compose.ui.res.useResource
-import backend.JsonUSF
 import java.io.File
 
 
@@ -189,9 +188,7 @@ fun InventoryPage(
                 runtimeFile.writeBytes(bytes)
             }
 
-            val dbText = runtimeFile.readText()
-            val usf = JsonUSF.fromString(dbText)
-            ProductDB.fromUSF(usf)
+            ProductDB.loadProductsFrom("files/dbfile.json");
 
             refreshInventory()
 

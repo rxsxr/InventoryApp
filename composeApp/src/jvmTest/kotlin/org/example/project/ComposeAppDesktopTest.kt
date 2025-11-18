@@ -37,13 +37,16 @@ class ComposeAppDesktopTest {
 
 		assertEquals( TagDB.toUSF(), origUSF );
 	}
-	
+
+
 	fun testFullRestore() { 
+		/*
 		val origUSF : USF_T = ProductDB.toUSF();
 		ProductDB.reset();
 		ProductDB.fromUSF(origUSF);
 
 		assertEquals( ProductDB.toUSF(), origUSF );
+		*/
 	}
 
 
@@ -225,7 +228,6 @@ class ComposeAppDesktopTest {
 		"/mnt/arch/home/tye/Documents/university work/y4s1/Programming_Languages/final/" +
 		"InventoryApp/composeApp/src/jvmMain/resources/files/"
 
-
 	@Test
 	fun productDBSerial() {
 		val initFile : String = 
@@ -234,10 +236,14 @@ class ComposeAppDesktopTest {
 		val dbFile   : String = 
 			dbPath + "./dbfile.json"
 
+		val transFile : String =
+			dbPath + "./transFile.json"
+
 		ProductDB.loadFromInit(initFile);
-		ProductDB.saveToDB(dbFile);
+
+		ProductDB.saveProductsTo(dbFile);
+		ProductDB.saveTransactionsTo(transFile);
 
 	}
 	*/
-
 }
