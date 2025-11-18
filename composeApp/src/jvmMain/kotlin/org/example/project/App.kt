@@ -357,8 +357,33 @@ fun UpdateInventoryPage(
     }
 }
 
-@Composable
 @Preview
+@Composable
 fun ReportPage() {
-    Text("This is the report page!")
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = darkBlue)
+            .safeContentPadding()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+
+        // title:
+        Text (
+            text = "REPORT GENERATION",
+            color = yellow,
+            fontFamily = monospace,
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        // prodcut selection
+        selectProductsUI()
+
+        Spacer(Modifier.height(20.dp))
+
+
+    }
 }
