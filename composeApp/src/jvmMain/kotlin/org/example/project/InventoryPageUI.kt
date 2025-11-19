@@ -17,10 +17,37 @@ import androidx.compose.ui.unit.dp
 import inventoryapp.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
+import java.io.File
 import middle.ProductDB
 import middle.typedefs.ProductInfo
 import backend.JsonUSF
 import org.example.project.darkBlue
+
+
+// load dbfile
+@OptIn(ExperimentalResourceApi::class)
+fun loadDatabaseFile() {
+
+    val runtimeFile = File("files/dbfile.json")
+
+    if (!runtimeFile.exists()) {
+        runtimeFile.parentFile?.mkdirs()
+
+
+        // val bytes = Res.readBytes("files/dbfile.json")
+
+        val resourceStream = Thread.currentThread()
+            .contextClassLoader
+            .getResourceAsStream("files/dbfile.json")
+            ?: error("Resource files/dbfile.json not found!")
+
+        runtimeFile.writeBytes(resourceStream.readAllBytes())
+    }
+
+    val dbText = runtimeFile.readText()
+    val usf = JsonUSF.fromString(dbText)
+    ProductDB.prodFromUSF(usf)
+}
 
 
 // load inventory function
@@ -33,25 +60,11 @@ fun loadInventory(): Triple<List<ProductInfo>, String?, Boolean> {
 
     LaunchedEffect(Unit) {
         try {
-
-
-            @OptIn(ExperimentalResourceApi::class)
-            val dbText = Res.readBytes("files/dbfile.json").decodeToString()
-            //val dbText = useResource("files/dbfile.json") { it.readBytes().decodeToString() }
-
-            val usf = JsonUSF.fromString(dbText)
-            ProductDB.prodFromUSF(usf)
+            loadDatabaseFile()
 
             products = ProductDB.itemMap.keys
-                .map { ProductDB.getInfoFor(it) }
-                .filter { it.totalStock > 0 }
+                .map { pid -> ProductDB.getInfoFor(pid) }
                 .sortedBy { it.gName }
-
-
-            ////// TODO
-          //  products.forEach { println(it) }
-            //////////////
-
 
         } catch (e: Exception) {
             loadError = e.message ?: "Unknown error loading database"
@@ -187,15 +200,13 @@ fun tagDropdown(tags: List<String>, selected: String, onSelect: (String) -> Unit
 
 
 
-
-
 // tag filter
 @Composable
 fun tagFilter(
     allProducts: List<ProductInfo>,
     onFiltered: (List<ProductInfo>) -> Unit
 ) {
-    // Collect all unique tags from products
+    // collect all unique tags from products
     val allTags = allProducts
         .flatMap { it.tagSet.map { tag -> tag.tag } }
         .distinct()
@@ -205,9 +216,8 @@ fun tagFilter(
     var menuExpanded by remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxWidth()) {
-        Text("Filter by Tags", color = Color.White, fontWeight = FontWeight.Bold, modifier=Modifier.padding(bottom = 3.dp))
 
-        // Multi-select dropdown button
+        // multi-select dropdown button
         Button(
             onClick = { menuExpanded = true },
             colors = ButtonDefaults.buttonColors(containerColor = lightBlue)
@@ -221,7 +231,7 @@ fun tagFilter(
             expanded = menuExpanded,
             onDismissRequest = { menuExpanded = false }
         ) {
-            // Clear all
+            // clear all
             DropdownMenuItem(
                 text = { Text("All Tags") },
                 onClick = {

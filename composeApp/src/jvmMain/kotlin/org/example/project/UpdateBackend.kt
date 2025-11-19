@@ -1,5 +1,8 @@
 package org.example.project
 
+import inventoryapp.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+
 import backend.JsonUSF
 import backend.TagDB
 import middle.ProductDB
@@ -7,6 +10,27 @@ import middle.typedefs.*
 import middle.pieces.*
 import middle.price.*
 import java.io.File
+
+/*
+
+// load dbfile
+@OptIn(ExperimentalResourceApi::class)
+fun loadDatabaseFile() {
+
+    val runtimeFile = File("files/dbfile.json")
+
+    if (!runtimeFile.exists()) {
+        runtimeFile.parentFile?.mkdirs()
+        val bytes = Res.readBytes("files/dbfile.json")
+        runtimeFile.writeBytes(bytes)
+    }
+
+    val dbText = runtimeFile.readText()
+    val usf = JsonUSF.fromString(dbText)
+    ProductDB.prodFromUSF(usf)
+}
+*/
+
 
 fun updateStock(productName: String, amount: Int, isAdd: Boolean):String {
 
@@ -235,12 +259,6 @@ fun editProduct(
 
         handle.setUnits(finalUnitStr, finalUnitAmt)
 
-        // if either is empty, clear units fully
-        /*if (finalUnitStr.isBlank() || finalUnitAmt == null) {
-            handle.clearUnits()
-        } else {
-            handle.setUnits(finalUnitStr, finalUnitAmt)
-        }*/
     }
 
 

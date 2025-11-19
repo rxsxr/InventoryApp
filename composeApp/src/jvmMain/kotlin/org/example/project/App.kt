@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.Modifier
 //import androidx.compose.foundation.layout.weight
 //import androidx.compose.ui.layout.weight
@@ -47,13 +48,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.text.style.TextOverflow
+import java.time.LocalDate
 
 import inventoryapp.composeapp.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
-
-
-
+import middle.typedefs.PID
 import middle.ProductDB
 import middle.typedefs.ProductInfo
 import androidx.compose.ui.res.useResource
@@ -184,23 +184,8 @@ fun InventoryPage(
     // load DB from dbfile.json
     LaunchedEffect(Unit) {
         try {
-            // file path
-            val runtimeFile = File("files/dbfile.json")
-
-            // if runtime DB doesn't exist, copy from resources
-            if (!runtimeFile.exists()) {
-                runtimeFile.parentFile?.mkdirs()
-
-                @OptIn(ExperimentalResourceApi::class)
-                val bytes = Res.readBytes("files/dbfile.json")
-                //val bytes = Res.files.dbfile_json.readBytes()
-
-                runtimeFile.writeBytes(bytes)
-            }
-
-            ProductDB.loadProductsFrom(runtimeFile.path);
+            loadDatabaseFile()
             refreshInventory()
-
         } catch (e: Exception) {
             loadError = e.message ?: "Unknown error loading database"
         } finally {
@@ -208,9 +193,7 @@ fun InventoryPage(
         }
     }
 
-    LaunchedEffect(products) {
-        filtered = products
-    }
+    LaunchedEffect(products) { filtered = products }
 
     // format page
     Column(
@@ -260,6 +243,15 @@ fun InventoryPage(
 
             else -> { // products load successfully
                 //var filtered by remember { mutableStateOf(products) }
+
+                Text (
+                    text = "Filter by Tags",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 3.dp)
+                )
 
                 tagFilter(products) { newFiltered ->
                     filtered = newFiltered
@@ -366,6 +358,13 @@ fun UpdateInventoryPage(
 @Preview
 @Composable
 fun ReportPage() {
+
+    var selectedProducts by remember { mutableStateOf<Set<PID>>(emptySet()) }
+    var startDate by remember { mutableStateOf<LocalDate?>(null) }
+    var endDate by remember { mutableStateOf<LocalDate?>(null) }
+    var reportMessage by remember { mutableStateOf<String?>(null) }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -381,14 +380,117 @@ fun ReportPage() {
             color = yellow,
             fontFamily = monospace,
             fontWeight = FontWeight.Bold,
-            fontSize = 32.sp,
-            modifier = Modifier.padding(bottom = 16.dp)
+            fontSize = 32.sp
         )
 
-        // prodcut selection
-        selectProductsUI()
+        Spacer(Modifier.height(40.dp))
+
+        Text (
+            text = "#1 - Select Products (by Name or Tags)",
+            color = lightBlue,
+            fontFamily = monospace,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .align(Alignment.Start)
+        )
+
+        Text (
+            text = "Select by Name",
+            color = Color.White,
+            fontFamily = monospace,
+            modifier = Modifier
+                .padding(bottom = 4.dp)
+                .align(Alignment.Start)
+        )
+
+
+        // product selection by name
+        selectProductsUI(
+            currentSelection = selectedProducts,
+            onSelectionChanged = { newSet ->
+                selectedProducts = newSet
+            }
+        )
 
         Spacer(Modifier.height(20.dp))
+
+
+        Text (
+            text = "#2 - Select Timeframe",
+            color = lightBlue,
+            fontFamily = monospace,
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .align(Alignment.Start)
+        )
+
+
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column (modifier = Modifier.weight(1f)) {
+                DateSelector(
+                    label = "Start Date",
+                    date = startDate,
+                    onDateChange = { startDate = it }
+                )
+            }
+
+            Column (modifier = Modifier.weight(1f)) {
+                DateSelector(
+                    label = "End Date",
+                    date = endDate,
+                    onDateChange = { endDate = it }
+                )
+            }
+        }
+
+        Spacer(Modifier.height(40.dp))
+
+        ElevatedButton( // generate report button
+            onClick = {
+
+                val result = generateReportFromSelections(
+                    selectedProducts = selectedProducts,
+                    startDate = startDate,
+                    endDate = endDate
+                )
+
+                reportMessage = if (result != null)
+                    "Report generated successfully! File name: $result"
+                else
+                    "Failed to generate report."
+
+            },
+            colors = ButtonDefaults.elevatedButtonColors(
+                containerColor = lightBlue,
+                contentColor = darkBlue,
+            ),
+            modifier = Modifier
+                .width(250.dp)
+        ){
+            Text(
+                "GENERATE REPORT",
+                fontFamily = monospace,
+                fontSize = 16.sp,
+            )
+        }
+
+        if (reportMessage != null) {
+            Spacer(Modifier.height(10.dp))
+
+            Text(
+                text = reportMessage!!,
+                fontFamily = monospace,
+                color = yellow
+            )
+        }
+
 
 
     }

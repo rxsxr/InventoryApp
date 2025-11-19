@@ -2,7 +2,7 @@
 package middle.price;
 
 sealed class PriceError : Exception()  {
-// "$" wasn't found at the start or end 
+// "$" wasn't found at the start or end
 object NoCurrencyMarker : PriceError();
 
 // User entered an empty amount
@@ -11,12 +11,12 @@ object EmptyAmount      : PriceError();
 object BadPriceString   : PriceError();
 }
 
-// Price represents an exact decimal. 
+// Price represents an exact decimal.
 
-//   See, in Ada I could declare an exact decimal as 
-//   "type Price is delta 0.01 digits 16" and be done with it. 
-//   But here, I have to implement fixed-point arithmetic manually, which is 
-//   tedious. And no, floats aren't good enough; floating point arithmetic is 
+//   See, in Ada I could declare an exact decimal as
+//   "type Price is delta 0.01 digits 16" and be done with it.
+//   But here, I have to implement fixed-point arithmetic manually, which is
+//   tedious. And no, floats aren't good enough; floating point arithmetic is
 //   *never* exact.
 data class Price(var amount : Int) {
 
@@ -24,7 +24,7 @@ data class Price(var amount : Int) {
 
 	operator fun plus(other : Price) : Price  = Price(amount + other.amount);
 
-	operator fun minus(other : Price) : Price = Price(amount + other.amount);
+	operator fun minus(other : Price) : Price = Price(amount - other.amount);
 
 	operator fun unaryPlus()  : Price = this ;
 	operator fun unaryMinus() : Price = Price(-this.amount);
@@ -39,7 +39,7 @@ data class Price(var amount : Int) {
 	}
 
 	companion object fromString {
-		operator fun invoke(inStr : String) : Price {  
+		operator fun invoke(inStr : String) : Price {
 			var retPrice : Price = Price(0);
 			var isNegative : Boolean = false;
 			var priceStr = inStr.trim();
@@ -72,7 +72,7 @@ data class Price(var amount : Int) {
 
 				2 -> null; // NO-OP
 
-				else -> 
+				else ->
 					// TODO: Make this more specific
 					throw PriceError.BadPriceString;
 			}
@@ -105,7 +105,7 @@ data class Price(var amount : Int) {
 				val decPart : Int = decStr.toInt();
 				val dolPart : Int = dolStr.toInt();
 
-				// It should be truncatedby now, so we shouldn't get 
+				// It should be truncatedby now, so we shouldn't get
 				// anything more than 2 digits
 				assert(0 <= decPart)
 				assert(decPart < 100)
@@ -132,7 +132,7 @@ operator fun Int.times(price : Price) : Price = Price(this * price.amount);
 
 val Zero : Price = Price(0);
 
-// I can't use a secondary constructor without calling the primary 
+// I can't use a secondary constructor without calling the primary
 // one because reasons, so I have to do this.
 /*
 // XXX: Should I make this use only one integer amount?
@@ -153,7 +153,7 @@ data class Price(var dollar : Int, var decimal : Int) {
 
 }
 
-// I can't use a secondary constructor without calling the primary 
+// I can't use a secondary constructor without calling the primary
 // one because reasons, so I have to do this.
 fun fromString( inStr : String ) : Price {
 	var retPrice : Price = Price(-1,-1);
@@ -175,7 +175,7 @@ fun fromString( inStr : String ) : Price {
 
 		2 -> null; // NO-OP
 
-		else -> 
+		else ->
 			// TODO: Make this more specific
 			throw PriceError.BadPriceString();
 	}

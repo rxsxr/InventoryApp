@@ -10,41 +10,41 @@ import middle.typedefs.*;
 
 class USF_TransError() : USF_Error();
 
-// NOTE: All values are obtained from when the transaction 
+// NOTE: All values are obtained from when the transaction
 // was made.
 data class Transaction
 	( var dateStamp   : LocalDate
 	, var idName      : PID          // The product's id when the transaction was made
 	, var numSold     : Int          // The value of newSales when commit() was called
 	, var pricePiece  : PricePiece   // The price it was when the transaction was made
-	) : IPrice by pricePiece 
-{ 
+	) : IPrice by pricePiece
+{
 
 	val day   : Int get() = dateStamp.day;
 	val month : Int get() = dateStamp.month.number;
 	val year  : Int get() = dateStamp.year;
 
-	val revenue : Price 
+	val revenue : Price
 		get() = numSold * pricePiece.sellPrice;
 
-	val cost : Price 
+	val cost : Price
 		get() = numSold * pricePiece.buyPrice;
 
 	val profit : Price = revenue - cost;
 
 // Private functions, not needed.
 
-	fun toUSF() : USF_T = 
+	fun toUSF() : USF_T =
 		join(
 			U_Map(mapOf(
 				"dateStamp" to dateToUSF(dateStamp),
-				"numSold"   to U_Int(numSold),
-				"idName"    to U_String(idName.name)
+				"numSold" to U_Int(numSold),
+				"idName" to U_String(idName.name)
 			)),
 			pricePieceToUSF(pricePiece)
 		)
 
-	companion object c { 
+	companion object c {
 		fun fromUSF(usf : USF_T) : Transaction {
 			if ( usf !is U_Map ) throw USF_TransError();
 
