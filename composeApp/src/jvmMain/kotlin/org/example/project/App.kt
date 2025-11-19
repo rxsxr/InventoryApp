@@ -173,7 +173,6 @@ fun InventoryPage(
     fun refreshInventory() {
         val newProducts = ProductDB.itemMap.keys
             .map { pid -> ProductDB.getInfoFor(pid) }
-            //.filter { info -> info.totalStock > 0 }
             .sortedBy { it.gName }
 
         products = newProducts
