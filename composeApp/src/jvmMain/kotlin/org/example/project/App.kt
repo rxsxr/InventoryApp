@@ -166,11 +166,14 @@ fun InventoryPage(
     var loadError by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
+    var tagFiltered by remember { mutableStateOf<List<ProductInfo>>(emptyList()) }
+    var lowStockFiltered by remember { mutableStateOf<List<ProductInfo>>(emptyList()) }
+
     // refresh function
     fun refreshInventory() {
         val newProducts = ProductDB.itemMap.keys
             .map { pid -> ProductDB.getInfoFor(pid) }
-            .filter { info -> info.totalStock > 0 }
+            //.filter { info -> info.totalStock > 0 }
             .sortedBy { it.gName }
 
         products = newProducts
@@ -195,6 +198,23 @@ fun InventoryPage(
 
     LaunchedEffect(products) { filtered = products }
 
+    // combined filters
+    fun applyCombinedFilters() {
+        val tagActive = tagFiltered.isNotEmpty() && tagFiltered != products
+        val lowActive = lowStockFiltered.isNotEmpty() && lowStockFiltered != products
+
+        filtered =
+            when {
+                tagActive && lowActive ->
+                    products.filter { it in tagFiltered && it in lowStockFiltered }
+
+                tagActive -> tagFiltered
+                lowActive -> lowStockFiltered
+
+                else -> products
+            }
+    }
+
     // format page
     Column(
         modifier = Modifier
@@ -205,7 +225,7 @@ fun InventoryPage(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        // title:
+        // title
         Text (
             text = "INVENTORY",
             color = yellow,
@@ -215,7 +235,54 @@ fun InventoryPage(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // cases for data loading:
+
+
+        Row ( // all filters
+
+        ) {
+            Column ( // filter by tags
+                modifier = Modifier.weight(1f)
+            ) {
+                Text (
+                    text = "Filter by Tags",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 3.dp)
+                )
+
+                tagFilter(
+                    allProducts = products,
+                    resetSignal = false
+                    ) { newFiltered ->
+                    tagFiltered = newFiltered
+                    applyCombinedFilters()
+                }
+
+            }
+
+            Column ( // filter by low stock
+                modifier = Modifier.weight(1f)
+            ) {
+                Text (
+                    text = "Filter by Low Stock",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .padding(bottom = 3.dp)
+                )
+
+                lowStockFilter(products) { newFiltered ->
+                    lowStockFiltered = newFiltered
+                    applyCombinedFilters()
+                }
+
+            }
+        }
+
+        // cases for data loading
         when {
             isLoading -> { // when products are loading
                 Text(
@@ -242,20 +309,7 @@ fun InventoryPage(
             }
 
             else -> { // products load successfully
-                //var filtered by remember { mutableStateOf(products) }
 
-                Text (
-                    text = "Filter by Tags",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.Start)
-                        .padding(bottom = 3.dp)
-                )
-
-                tagFilter(products) { newFiltered ->
-                    filtered = newFiltered
-                }
 
                 // display table in scrollable box
                 Box (
@@ -277,10 +331,8 @@ fun InventoryPage(
                 containerColor = lightBlue,
                 contentColor = darkBlue,
             ),
-            //elevation = ButtonDefaults.elevatedButtonElevation(defaultElevation = 8.dp),
             modifier = Modifier
-                .width(250.dp),
-            //.padding(top = 20.dp),
+                .width(250.dp)
         ) {
             Text(
                 "UPDATE INVENTORY",
@@ -290,6 +342,7 @@ fun InventoryPage(
         }
     }
 }
+
 
 var refreshInventoryCallback: (() -> Unit)? = null
 
@@ -302,8 +355,6 @@ enum class UpdateMode {
     RemoveProduct,
     EditProductInfo
 }
-
-
 
 
 @Composable
@@ -454,6 +505,11 @@ fun ReportPage() {
 
         ElevatedButton( // generate report button
             onClick = {
+
+                if (selectedProducts.isEmpty()) {
+                    reportMessage = "Error: no product selected"
+                    return@ElevatedButton
+                }
 
                 val result = generateReportFromSelections(
                     selectedProducts = selectedProducts,

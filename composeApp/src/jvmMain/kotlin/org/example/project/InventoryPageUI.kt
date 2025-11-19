@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.res.useResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -92,7 +91,6 @@ fun tableHeaderRow() {
         headerCell("Unit", Modifier.weight(1f))
         headerCell("Buy Price", Modifier.weight(1f))
         headerCell("Sale Price", Modifier.weight(1f))
-        //headerCell("Date Last Sold", Modifier.weight(1f))
     }
 }
 
@@ -151,7 +149,6 @@ fun inventoryTable(products: List<ProductInfo>) {
                 itemCell(unitText, Modifier.weight(1f), Color.White)
                 itemCell(info.buyPrice.toString(), Modifier.weight(1f), Color.White)
                 itemCell(info.sellPrice.toString(), Modifier.weight(1f), Color.White)
-                //itemCell(info.salesInfo.lastSaleDate?.toString() ?: "—", Modifier.weight(1f), Color.White)
             }
         }
     }
@@ -204,6 +201,7 @@ fun tagDropdown(tags: List<String>, selected: String, onSelect: (String) -> Unit
 @Composable
 fun tagFilter(
     allProducts: List<ProductInfo>,
+    resetSignal: Boolean,
     onFiltered: (List<ProductInfo>) -> Unit
 ) {
     // collect all unique tags from products
@@ -214,6 +212,14 @@ fun tagFilter(
 
     var selectedTags by remember { mutableStateOf(setOf<String>()) }
     var menuExpanded by remember { mutableStateOf(false) }
+
+    // to clear state in report generation
+    LaunchedEffect(resetSignal) {
+        if (resetSignal) {
+            selectedTags = emptySet()
+            //onFiltered(allProducts)
+        }
+    }
 
     Column(Modifier.fillMaxWidth()) {
 
@@ -276,5 +282,28 @@ fun tagFilter(
 }
 
 
+@Composable
+fun lowStockFilter(
+    allProducts: List<ProductInfo>,
+    onFiltered: (List<ProductInfo>) -> Unit
+) {
+    var isLowStockOnly by remember { mutableStateOf(false) }
 
+    Button(
+        onClick = {
+            isLowStockOnly = !isLowStockOnly
+            val filtered =
+                if (!isLowStockOnly) allProducts
+                else allProducts.filter { it.stockLevel.name == "Low" }
+
+            onFiltered(filtered)
+        },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = lightBlue,
+            contentColor = darkBlue
+        )
+    ) {
+        Text(if (isLowStockOnly) "On" else "Off")
+    }
+}
 

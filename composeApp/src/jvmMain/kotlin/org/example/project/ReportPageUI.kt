@@ -46,6 +46,7 @@ fun selectProductsUI(
 
     var selectedByName by remember { mutableStateOf<Set<PID>>(emptySet()) }
     var selectedByTag by remember { mutableStateOf<List<ProductInfo>>(emptyList()) }
+    var resetTags by remember { mutableStateOf(false) }
 
     // load DB + products
     val (products, loadError, isLoading) = loadInventory()
@@ -88,6 +89,9 @@ fun selectProductsUI(
                     onSelectionChange = { newSet ->
                         if (newSet.isNotEmpty()) {
                             selectedByTag = emptyList()
+                            resetTags = true
+                        } else {
+                            resetTags = false
                         }
 
                         selectedByName = newSet
@@ -113,7 +117,13 @@ fun selectProductsUI(
                 )
 
                 // select products by tag
-                tagFilter(products) { newFiltered ->
+                tagFilter(
+                    allProducts = products,
+                    resetSignal = resetTags
+                ) { newFiltered ->
+
+                    resetTags = false
+
                     if (newFiltered.isNotEmpty()) {
                         selectedByName = emptySet()
                     }
@@ -258,6 +268,19 @@ fun DateSelector(
     val months = Month.values().toList()
     val daysInMonth = selected.month.length(selected.isLeapYear)
 
+    val monthLabel =
+        if (date == null) "Month"
+        else selected.month.name.lowercase().replaceFirstChar { it.uppercase() }
+
+    val dayLabel =
+        if (date == null) "Day"
+        else selected.dayOfMonth.toString()
+
+    val yearLabel =
+        if (date == null) "Year"
+        else selected.year.toString()
+
+
     Column(
         Modifier.fillMaxWidth()
     ) {
@@ -281,7 +304,7 @@ fun DateSelector(
                     colors = ButtonDefaults.buttonColors(containerColor = lightBlue)
                 ) {
                     Text(
-                        selected.month.name.lowercase().replaceFirstChar { it.uppercase() },
+                        monthLabel,
                         fontFamily = monospace,
                         color = darkBlue
                     )
@@ -311,7 +334,7 @@ fun DateSelector(
                         .padding(start=10.dp, end=10.dp)
                 ) {
                     Text(
-                        selected.dayOfMonth.toString(),
+                        dayLabel,
                         fontFamily = monospace,
                         color = darkBlue
                     )
@@ -339,7 +362,7 @@ fun DateSelector(
                     colors = ButtonDefaults.buttonColors(containerColor = lightBlue)
                     ) {
                     Text(
-                        selected.year.toString(),
+                        yearLabel,
                         fontFamily = monospace,
                         color = darkBlue
                     )
